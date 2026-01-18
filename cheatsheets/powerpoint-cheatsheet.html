@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerPoint Cheat Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1f3a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .provenance {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            margin-bottom: 15px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .search-section {
+            padding: 30px 40px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .section.hidden {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2d3561;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #2d3561;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .card p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .card ul, .card ol {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .command {
+            background: #2d3561;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .tip {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .platform-note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .shortcut-label {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        code {
+            background: #2d3561;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        code:hover {
+            background: #3d4571;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            background: #000000;
+            color: #808080;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .footer-subtitle {
+            color: #808080;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .footer-tagline {
+            font-style: italic;
+            color: #808080;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        footer a {
+            color: #808080;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .provenance {
+                font-size: 0.7rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .search-section {
+                padding: 20px;
+            }
+
+            .shortcut-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="provenance">An Ideas to Life experiment</div>
+            <h1>📊 PowerPoint Cheat Sheet</h1>
+            <p class="subtitle">Essential shortcuts, workflows, and best practices for beginner to intermediate users</p>
+        </header>
+
+        <div class="search-section">
+            <input type="text" id="searchBox" class="search-box" placeholder="Search shortcuts, commands, tips...">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="getting-started">Getting Started</button>
+                <button class="filter-btn" data-filter="essentials">Essentials</button>
+                <button class="filter-btn" data-filter="shortcuts">Shortcuts</button>
+                <button class="filter-btn" data-filter="workflows">Workflows</button>
+                <button class="filter-btn" data-filter="tips">Tips & Gotchas</button>
+                <button class="filter-btn" data-filter="resources">Resources</button>
+            </div>
+        </div>
+
+        <div class="content" id="content">
+            <div class="section" data-category="getting-started">
+                <h2 class="section-title">Getting Started</h2>
+
+                <div class="card">
+                    <div class="card-title">Desktop vs Web: Which Should You Use?</div>
+                    <p><strong>Desktop (Windows/Mac)</strong> offers the full feature set including Presenter View, custom animations, slide masters, advanced design tools, and complete printing options.</p>
+                    <p><strong>Web Version</strong> is great for quick edits and real-time collaboration but lacks Presenter View, custom animations, password protection, embedded video playback, and precision tools like rulers and gridlines.</p>
+                    <p><strong>Recommendation:</strong> Use desktop for creating and presenting. Use web for quick edits and collaboration on the go.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Understanding the Interface</div>
+                    <p>PowerPoint's interface consists of:</p>
+                    <ul>
+                        <li><strong>Ribbon:</strong> Top menu bar with tabs (Home, Insert, Design, etc.)</li>
+                        <li><strong>Slide Pane:</strong> Main editing area in the center</li>
+                        <li><strong>Thumbnail Pane:</strong> Left sidebar showing all slides</li>
+                        <li><strong>Notes Pane:</strong> Bottom area for speaker notes</li>
+                    </ul>
+                    <div class="platform-note">Platform notes: Access ribbon with Alt key (Windows) or use menu bar shortcuts on Mac</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Creating Your First Presentation</div>
+                    <ol>
+                        <li>Open PowerPoint and choose a theme or blank presentation</li>
+                        <li>Add slides using the New Slide button or <code>Ctrl+M</code> (Windows) / <code>Cmd+Shift+N</code> (Mac)</li>
+                        <li>Choose appropriate layouts for each slide</li>
+                        <li>Add content: text, images, shapes</li>
+                        <li>Save regularly using <code>Ctrl+S</code> (Windows) / <code>Cmd+S</code> (Mac)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="section" data-category="essentials">
+                <h2 class="section-title">Essentials / Core Concepts</h2>
+
+                <div class="card">
+                    <div class="card-title">Content First, Design Second</div>
+                    <p>The golden rule: <strong>always plan your content before designing</strong>. Write your outline or script in a Word document first. This helps organize ideas and create the correct narrative sequence.</p>
+                    <p>Only after you know what you're saying should you focus on how it looks.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Slide Layouts and Masters</div>
+                    <p><strong>Layouts</strong> are pre-designed slide templates that control where content appears. Change layout via Home tab → Layout.</p>
+                    <p><strong>Slide Masters</strong> define the overall look (fonts, colors, positioning) for your entire presentation. Editing the master updates all slides automatically.</p>
+                    <div class="platform-note">Platform notes: Slide Master editing only available in desktop versions</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Themes vs Templates</div>
+                    <p><strong>Theme:</strong> A color palette and font set that gives your presentation a consistent look. Can be applied to any presentation.</p>
+                    <p><strong>Template:</strong> A complete presentation file with pre-designed slides, content suggestions, and a theme. Start with these for inspiration but customize to avoid looking generic.</p>
+                    <div class="tip">
+                        <div class="tip-title">💡 Pro Tip</div>
+                        Avoid using default PowerPoint designs as-is—they make presentations look thrown together last minute.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Format Painter: Your Consistency Tool</div>
+                    <p>The Format Painter lets you copy formatting from one object to another, speeding up your design workflow dramatically.</p>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Single use</span>
+                            <code>Ctrl+Shift+C / Ctrl+Shift+V</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Multiple use</span>
+                            <span>Double-click Format Painter</span>
+                        </div>
+                    </div>
+                    <div class="platform-note">Platform notes: Mac uses Cmd+Shift+C / Cmd+Shift+V</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Alignment and Positioning</div>
+                    <p>PowerPoint has no built-in keyboard shortcuts for alignment. Instead, use the alignment tools:</p>
+                    <ul>
+                        <li>Select objects → Format tab → Align dropdown</li>
+                        <li>Enable gridlines and guides (View tab) for precision</li>
+                        <li>Use Smart Guides (automatic) that appear when dragging objects</li>
+                    </ul>
+                    <p><strong>Why it matters:</strong> Precisely aligned slides signal professionalism and attention to detail.</p>
+                </div>
+            </div>
+
+            <div class="section" data-category="shortcuts">
+                <h2 class="section-title">Commands & Shortcuts</h2>
+
+                <div class="card">
+                    <div class="card-title">Navigation & File Management</div>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">New presentation</span>
+                            <code>Ctrl+N</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Open file</span>
+                            <code>Ctrl+O</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Save</span>
+                            <code>Ctrl+S</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Print</span>
+                            <code>Ctrl+P</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Undo</span>
+                            <code>Ctrl+Z</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Redo</span>
+                            <code>Ctrl+Y</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Find</span>
+                            <code>Ctrl+F</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Replace</span>
+                            <code>Ctrl+H</code>
+                        </div>
+                    </div>
+                    <div class="platform-note">Platform notes: Mac uses Cmd instead of Ctrl. Redo on Mac is Cmd+Shift+Z</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Slide Operations</div>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">New slide</span>
+                            <code>Ctrl+M</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Duplicate slide</span>
+                            <code>Ctrl+D</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Delete slide</span>
+                            <code>Delete</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Next slide</span>
+                            <code>Page Down</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Previous slide</span>
+                            <code>Page Up</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Go to slide number</span>
+                            <code>Ctrl+G</code>
+                        </div>
+                    </div>
+                    <div class="platform-note">Platform notes: Mac uses Cmd+Shift+N for new slide</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Text Editing & Formatting</div>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Bold</span>
+                            <code>Ctrl+B</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Italic</span>
+                            <code>Ctrl+I</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Underline</span>
+                            <code>Ctrl+U</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Increase font size</span>
+                            <code>Ctrl+Shift+&gt;</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Decrease font size</span>
+                            <code>Ctrl+Shift+&lt;</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Align left</span>
+                            <code>Ctrl+L</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Align center</span>
+                            <code>Ctrl+E</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Align right</span>
+                            <code>Ctrl+R</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Select all</span>
+                            <code>Ctrl+A</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Copy</span>
+                            <code>Ctrl+C</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Cut</span>
+                            <code>Ctrl+X</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Paste</span>
+                            <code>Ctrl+V</code>
+                        </div>
+                    </div>
+                    <div class="platform-note">Platform notes: Mac uses Cmd instead of Ctrl for all text operations</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Object Manipulation</div>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Group objects</span>
+                            <code>Ctrl+G</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Ungroup objects</span>
+                            <code>Ctrl+Shift+G</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Send to back</span>
+                            <code>Ctrl+Shift+[</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Bring to front</span>
+                            <code>Ctrl+Shift+]</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Rotate</span>
+                            <code>Alt + arrow keys</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Resize proportionally</span>
+                            <span>Hold Shift while dragging</span>
+                        </div>
+                    </div>
+                    <div class="platform-note">Platform notes: Mac uses Cmd instead of Ctrl. Option replaces Alt</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Presentation Mode</div>
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Start from beginning</span>
+                            <code>F5</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Start from current slide</span>
+                            <code>Shift+F5</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Next slide/animation</span>
+                            <code>N / Space / Right Arrow</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Previous slide</span>
+                            <code>P / Backspace / Left Arrow</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Go to slide</span>
+                            <span>Type slide number + Enter</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">Black screen</span>
+                            <code>B</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">White screen</span>
+                            <code>W</code>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-label">End show</span>
+                            <code>Esc</code>
+                        </div>
+                    </div>
+                    <div class="platform-note">Platform notes: Mac uses Cmd+Return for slideshow from current slide</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Quick Access Tips</div>
+                    <p>Press <code>Alt</code> (Windows) to display KeyTips—letters that appear over ribbon commands. Press the corresponding letter to execute that command.</p>
+                    <p>Press <code>Alt+Q</code> to jump to "Tell me what you want to do" search box for quick command access.</p>
+                    <div class="platform-note">Platform notes: Mac does not have KeyTips. Instead, use Cmd+Option+Ctrl+, to access ribbon with VoiceOver</div>
+                </div>
+            </div>
+
+            <div class="section" data-category="workflows">
+                <h2 class="section-title">Common Workflows</h2>
+
+                <div class="card">
+                    <div class="card-title">Creating a Presentation from Scratch</div>
+                    <ol>
+                        <li><strong>Plan your content:</strong> Write an outline or script in Word to organize your ideas</li>
+                        <li><strong>Create structure:</strong> Open PowerPoint and create blank slides for each main point</li>
+                        <li><strong>Choose a theme:</strong> Apply a professional theme from Design tab (avoid defaults)</li>
+                        <li><strong>Add content:</strong> Fill in text, keeping it minimal—slides are visual aids, not documents</li>
+                        <li><strong>Insert visuals:</strong> Add high-quality images, charts, or diagrams to support your points</li>
+                        <li><strong>Apply consistent formatting:</strong> Use Format Painter to maintain visual consistency</li>
+                        <li><strong>Add transitions:</strong> Use simple transitions between slides (avoid overuse)</li>
+                        <li><strong>Review and refine:</strong> Check alignment, spelling, and flow</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Designing Consistent Slides</div>
+                    <ol>
+                        <li><strong>Choose your base style:</strong> Select fonts, colors, and spacing for one slide</li>
+                        <li><strong>Use Format Painter:</strong> Copy formatting to similar elements across slides</li>
+                        <li><strong>Enable alignment tools:</strong> Turn on gridlines (View → Gridlines)</li>
+                        <li><strong>Align objects:</strong> Select multiple objects → Format → Align → choose option</li>
+                        <li><strong>Check consistency:</strong> Review all slides in Slide Sorter view</li>
+                        <li><strong>Update master:</strong> For presentation-wide changes, edit the Slide Master</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Delivering a Presentation</div>
+                    <ol>
+                        <li><strong>Add speaker notes:</strong> Write reminders in the Notes pane below each slide</li>
+                        <li><strong>Practice with Presenter View:</strong> Rehearse using <code>Alt+F5</code> to see notes and timer</li>
+                        <li><strong>Check your setup:</strong> Test projector/screen connection before presenting</li>
+                        <li><strong>Start the show:</strong> Press <code>F5</code> from first slide or <code>Shift+F5</code> from current</li>
+                        <li><strong>Navigate smoothly:</strong> Use N/P keys or arrow keys to move between slides</li>
+                        <li><strong>Use B/W keys:</strong> Black or white out the screen when taking questions</li>
+                        <li><strong>End gracefully:</strong> Press <code>Esc</code> to exit or advance past last slide</li>
+                    </ol>
+                    <div class="platform-note">Platform notes: Presenter View only available in desktop versions (Windows/Mac)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Collaborating on Presentations</div>
+                    <ol>
+                        <li><strong>Save to cloud:</strong> Store file in OneDrive or SharePoint for easy sharing</li>
+                        <li><strong>Share access:</strong> Click Share button and add collaborators</li>
+                        <li><strong>Edit together:</strong> Multiple people can edit simultaneously (web or desktop)</li>
+                        <li><strong>Use comments:</strong> Add comments for feedback without changing content</li>
+                        <li><strong>Review changes:</strong> Check version history to see who changed what</li>
+                        <li><strong>Finalize:</strong> Once complete, download a final copy for presenting offline</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="section" data-category="tips">
+                <h2 class="section-title">Tips & Gotchas</h2>
+
+                <div class="tip">
+                    <div class="tip-title">❌ Common Mistakes to Avoid</div>
+                    <ul>
+                        <li><strong>Too much text:</strong> Keep text minimal (6-8 lines max per slide). Use visuals to convey information.</li>
+                        <li><strong>Reading slides word-for-word:</strong> Your slides should support your talk, not be your talk.</li>
+                        <li><strong>Tiny fonts:</strong> Never go below 24pt font size. If it doesn't fit, simplify or split into multiple slides.</li>
+                        <li><strong>Using default templates as-is:</strong> Everyone recognizes default PowerPoint designs. Customize them.</li>
+                        <li><strong>Poor alignment:</strong> Sloppy alignment makes your work look unprofessional. Use alignment tools.</li>
+                        <li><strong>Overcrowded slides:</strong> Leave white space. It helps audience focus on what matters.</li>
+                        <li><strong>Low-quality images:</strong> Blurry photos on large screens look terrible. Use high-resolution images.</li>
+                        <li><strong>Spelling errors:</strong> A single typo can undermine your credibility. Proofread carefully.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Platform-Specific Limitations</div>
+                    <p><strong>Web version cannot:</strong></p>
+                    <ul>
+                        <li>Use Presenter View (desktop only)</li>
+                        <li>Create or modify custom animations (can view existing ones)</li>
+                        <li>Open password-protected presentations</li>
+                        <li>Play embedded videos</li>
+                        <li>Edit Slide Masters</li>
+                        <li>Print with full options (notes pages, handouts)</li>
+                    </ul>
+                    <p><strong>Mac differences:</strong></p>
+                    <ul>
+                        <li>Fewer shortcuts available than Windows (but can create custom ones)</li>
+                        <li>Some Windows shortcuts use Control key on Mac (not all use Cmd)</li>
+                        <li>No Alt-based KeyTips for ribbon access</li>
+                    </ul>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Best Practices for Design</div>
+                    <ul>
+                        <li><strong>One idea per slide:</strong> Don't cram multiple concepts together</li>
+                        <li><strong>High contrast:</strong> Ensure text is easily readable against background</li>
+                        <li><strong>Consistent spacing:</strong> Keep margins and padding uniform across slides</li>
+                        <li><strong>Limit colors:</strong> Stick to 2-3 main colors plus black/white</li>
+                        <li><strong>Simple transitions:</strong> Fade or None—fancy transitions distract</li>
+                        <li><strong>Quality over quantity:</strong> 10 focused slides beat 30 cluttered ones</li>
+                    </ul>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Presentation Delivery Tips</div>
+                    <ul>
+                        <li><strong>Practice with Presenter View:</strong> Get comfortable seeing notes while audience sees slides</li>
+                        <li><strong>Arrive early:</strong> Test equipment and fix any technical issues before audience arrives</li>
+                        <li><strong>Know your transitions:</strong> Don't be surprised by animations or builds during live delivery</li>
+                        <li><strong>Have a backup:</strong> Save your presentation in multiple formats (PPTX, PDF) on multiple devices</li>
+                        <li><strong>Learn the keyboard shortcuts:</strong> Navigating with keys looks more professional than clicking</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Quick Fixes for Common Issues</div>
+                    <ul>
+                        <li><strong>Slides won't advance:</strong> Check if you're in Edit mode instead of Presentation mode</li>
+                        <li><strong>Animations not playing:</strong> Unsupported animations in web version—use desktop</li>
+                        <li><strong>Text looks different:</strong> Font not installed on presenting computer—use common fonts or embed fonts</li>
+                        <li><strong>Objects misaligned:</strong> Use Format → Align → Align to Slide for consistent positioning</li>
+                        <li><strong>Lost speaker notes:</strong> Notes pane might be collapsed—drag bottom border up to expand</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section" data-category="resources">
+                <h2 class="section-title">Links / Resources</h2>
+
+                <div class="card">
+                    <div class="card-title">Official Microsoft Documentation</div>
+                    <ul>
+                        <li><a href="https://support.microsoft.com/en-us/office/use-keyboard-shortcuts-to-create-powerpoint-presentations-ebb3d20e-dcd4-444f-a38e-bb5c5ed180f4" target="_blank">Keyboard shortcuts for creating presentations</a></li>
+                        <li><a href="https://support.microsoft.com/en-us/office/use-keyboard-shortcuts-to-deliver-powerpoint-presentations-1524ffce-bd2a-45f4-9a7f-f18b992b93a0" target="_blank">Keyboard shortcuts for delivering presentations</a></li>
+                        <li><a href="https://support.microsoft.com/en-us/office/compare-powerpoint-features-on-different-platforms-90986850-227c-4b25-938e-1c5838166b8b" target="_blank">Compare PowerPoint features across platforms</a></li>
+                        <li><a href="https://learn.microsoft.com/en-us/office365/servicedescriptions/office-online-service-description/powerpoint-online" target="_blank">PowerPoint for the web service description</a></li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Comprehensive Guides & Tutorials</div>
+                    <ul>
+                        <li><a href="https://www.computerworld.com/article/1647230/powerpoint-for-microsoft-365-cheat-sheet.html" target="_blank">Computerworld: PowerPoint for Microsoft 365 cheat sheet</a></li>
+                        <li><a href="https://www.goskills.com/microsoft-office/shortcuts/powerpoint" target="_blank">GoSkills: 100 Insanely Helpful PowerPoint Shortcuts</a></li>
+                        <li><a href="https://24slides.com/presentbetter/powerpoint-101-the-ultimate-tutorial-for-beginners" target="_blank">24Slides: PowerPoint 101 for Beginners</a></li>
+                        <li><a href="https://business.tutsplus.com/series/how-to-use-powerpoint-ultimate-tutorial-guide--cms-1207" target="_blank">Envato Tuts+: How to Use PowerPoint (Ultimate Guide)</a></li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Best Practices & Design</div>
+                    <ul>
+                        <li><a href="https://24slides.com/presentbetter/powerpoint-design-workflow" target="_blank">45 Tips to Speed Up Your PowerPoint Design Workflow</a></li>
+                        <li><a href="https://www.slidesai.io/blog/powerpoint-dos-and-donts" target="_blank">16 PowerPoint Dos and Don'ts</a></li>
+                        <li><a href="https://www.classpoint.io/blog/powerpoint-mistakes" target="_blank">PowerPoint Mistakes Beginners Make (And Pros Avoid)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="no-results" id="noResults" style="display: none;">
+                <p>No results found. Try a different search term or filter.</p>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-title">Ideas to Life</div>
+                <div class="footer-subtitle">Published by Alexandre Franco · <a href="https://ideas-to-life.ai" target="_blank">ideas-to-life.ai</a></div>
+                <div class="footer-tagline">
+                    Turning ideas into consumer experiences with Generative AI.<br>
+                    — Built with transparency. Shipped with intent.
+                </div>
+                <div class="footer-links">
+                    <span>© 2026 Ideas to Life. All rights reserved.</span>
+                    <span>·</span>
+                    <a href="#" target="_blank">RSS</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const content = document.getElementById('content');
+        const sections = document.querySelectorAll('.section');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const noResults = document.getElementById('noResults');
+
+        let currentFilter = 'all';
+
+        // Search functionality
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filterContent(searchTerm, currentFilter);
+        });
+
+        // Filter buttons
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentFilter = button.dataset.filter;
+                filterContent(searchBox.value.toLowerCase(), currentFilter);
+            });
+        });
+
+        function filterContent(searchTerm, filter) {
+            let visibleCount = 0;
+
+            sections.forEach(section => {
+                const category = section.dataset.category;
+                
+                // Check if category matches the filter
+                const matchesFilter = filter === 'all' || category === filter;
+                
+                // For search, check both section title and individual cards
+                let matchesSearch = searchTerm === '';
+                let hasMatchingCards = false;
+                
+                if (searchTerm !== '') {
+                    const sectionTitle = section.querySelector('.section-title').textContent.toLowerCase();
+                    const cards = section.querySelectorAll('.card, .tip');
+                    
+                    // Check section title
+                    if (sectionTitle.includes(searchTerm)) {
+                        matchesSearch = true;
+                    }
+                    
+                    // Check individual cards and hide/show them
+                    cards.forEach(card => {
+                        const cardText = card.textContent.toLowerCase();
+                        if (cardText.includes(searchTerm)) {
+                            card.style.display = 'block';
+                            matchesSearch = true;
+                            hasMatchingCards = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                } else {
+                    // Show all cards when no search term
+                    const cards = section.querySelectorAll('.card, .tip');
+                    cards.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                }
+
+                if (matchesSearch && matchesFilter) {
+                    section.classList.remove('hidden');
+                    visibleCount++;
+                    
+                    // Highlight search term
+                    if (searchTerm !== '') {
+                        highlightText(section, searchTerm);
+                    } else {
+                        removeHighlights(section);
+                    }
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        function highlightText(element, searchTerm) {
+            const cards = element.querySelectorAll('.card, .tip');
+            cards.forEach(card => {
+                const cardTitle = card.querySelector('.card-title, .tip-title');
+                if (cardTitle) {
+                    const text = cardTitle.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.borderLeftColor = '#ffc107';
+                        card.style.background = '#fff9e6';
+                    }
+                }
+            });
+        }
+
+        function removeHighlights(element) {
+            const cards = element.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.borderLeftColor = '#667eea';
+                card.style.background = '#f8f9fa';
+            });
+            const tips = element.querySelectorAll('.tip');
+            tips.forEach(tip => {
+                tip.style.borderLeftColor = '#ffc107';
+                tip.style.background = '#fff3cd';
+            });
+        }
+
+        // Add copy functionality to code blocks
+        document.querySelectorAll('code').forEach(code => {
+            code.title = 'Click to copy';
+            code.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const text = this.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = this.textContent;
+                    const originalBg = this.style.background;
+                    this.textContent = '✓ Copied!';
+                    this.style.background = '#4caf50';
+                    setTimeout(() => {
+                        this.textContent = original;
+                        this.style.background = originalBg || '#2d3561';
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

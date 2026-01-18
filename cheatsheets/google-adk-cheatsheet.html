@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google ADK Cheat Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1f3a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .provenance {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            margin-bottom: 15px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .search-section {
+            padding: 30px 40px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .section.hidden {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2d3561;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #2d3561;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .command {
+            background: #2d3561;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .tip {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        .highlight {
+            background: #fff59d;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        footer {
+            background: #000000;
+            color: #808080;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .footer-subtitle {
+            color: #808080;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .footer-tagline {
+            font-style: italic;
+            color: #808080;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        footer a {
+            color: #808080;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .provenance {
+                font-size: 0.7rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .search-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="provenance">An Ideas to Life experiment</div>
+            <h1>🤖 Google ADK Cheat Sheet</h1>
+            <p class="subtitle">Your quick reference guide for building AI agents with Google Agent Development Kit</p>
+        </header>
+
+        <div class="search-section">
+            <input type="text" id="searchBox" class="search-box" placeholder="Search commands, patterns, tools...">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="getting-started">Getting Started</button>
+                <button class="filter-btn" data-filter="agents">Agents</button>
+                <button class="filter-btn" data-filter="tools">Tools</button>
+                <button class="filter-btn" data-filter="patterns">Patterns</button>
+                <button class="filter-btn" data-filter="a2a">A2A Protocol</button>
+                <button class="filter-btn" data-filter="tips">Tips & Best Practices</button>
+            </div>
+        </div>
+
+        <div class="content" id="content">
+            <div class="section" data-category="getting-started">
+                <h2 class="section-title">Getting Started</h2>
+
+                <div class="tip">
+                    <div class="tip-title">🚀 5-Minute Quick Start</div>
+                    <strong>1. Prerequisites:</strong> Python 3.10+ or Node.js 18+<br>
+                    <strong>2. Install:</strong> <code>pip install google-adk</code> (Python) or <code>npm install @google/adk</code> (TypeScript)<br>
+                    <strong>3. Setup API Key:</strong> Create <code>.env</code> with your Gemini API key<br>
+                    <strong>4. Create Agent:</strong> <code>adk create my-agent</code><br>
+                    <strong>5. Run:</strong> <code>python agent.py</code> or <code>node agent.js</code><br><br>
+                    That's it! You've built your first AI agent.
+                </div>
+
+                <div class="card">
+                    <div class="card-title">What is Google ADK?</div>
+                    <p>Google's Agent Development Kit (ADK) is an open-source, code-first framework for building and deploying AI agents. It's the same toolkit that powers agents inside Google products like Agentspace and Customer Engagement Suite.</p>
+                    <br>
+                    <p><strong>Key Features:</strong></p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Model-agnostic:</strong> Optimized for Gemini but works with any LLM</li>
+                        <li><strong>Multi-language:</strong> Python, TypeScript, Java, and Go support</li>
+                        <li><strong>Production-ready:</strong> Same framework used in Google products</li>
+                        <li><strong>Multi-agent orchestration:</strong> Build teams of specialized agents</li>
+                        <li><strong>A2A protocol support:</strong> Enable agent-to-agent communication</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Installation - Python</div>
+                    <div class="command"># Create virtual environment<br>python -m venv .venv<br>source .venv/bin/activate  # On Windows: .venv\Scripts\activate<br><br># Install ADK<br>pip install google-adk<br><br># Create a new agent project<br>adk create my-agent<br>cd my-agent</div>
+                    <p style="margin-top: 10px;"><strong>Platform notes:</strong> Requires Python 3.10+ (3.10–3.12 recommended)</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Installation - TypeScript</div>
+                    <div class="command"># Create project directory<br>mkdir my-adk-agent && cd my-adk-agent<br><br># Initialize npm project<br>npm init -y<br><br># Install ADK and dependencies<br>npm install @google/adk @google/adk-devtools<br>npm install -D typescript<br><br># Create tsconfig.json<br>npx tsc --init</div>
+                    <p style="margin-top: 10px;"><strong>Platform notes:</strong> Requires Node.js 18 or higher</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Environment Setup</div>
+                    <p>Create a <code>.env</code> file in your project root with your API credentials:</p>
+                    <div class="command"># For Google AI Studio<br>GOOGLE_API_KEY=your_api_key_here<br><br># Or for Vertex AI<br>GOOGLE_CLOUD_PROJECT=your_project_id<br>GOOGLE_CLOUD_LOCATION=us-central1</div>
+                    <p style="margin-top: 10px;">Get your API key from <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a> or set up <a href="https://cloud.google.com/vertex-ai" target="_blank">Vertex AI</a> credentials.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Your First Agent</div>
+                    <p>Here's a simple "Hello World" agent in Python:</p>
+                    <div class="command">from google.adk import LlmAgent<br><br># Create a simple agent<br>agent = LlmAgent(<br>    name="hello_agent",<br>    model="gemini-2.0-flash-exp",<br>    preamble="You are a helpful assistant."<br>)<br><br># Run the agent<br>response = agent.run("Hello! What can you do?")<br>print(response)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Common Use Cases</div>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Customer support:</strong> Build agents that answer questions and resolve issues</li>
+                        <li><strong>Data analysis:</strong> Create agents that query databases and generate insights</li>
+                        <li><strong>Content generation:</strong> Develop agents for writing, summarization, and editing</li>
+                        <li><strong>Task automation:</strong> Orchestrate complex workflows with multiple agents</li>
+                        <li><strong>Research assistant:</strong> Build agents that search, analyze, and synthesize information</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section" data-category="agents">
+                <h2 class="section-title">Agent Types</h2>
+
+                <div class="card">
+                    <div class="card-title">LLM Agents</div>
+                    <p>LLM Agents use Large Language Models as their core engine to understand natural language, reason, plan, and dynamically decide which tools to use.</p>
+                    <div class="command"># Python example<br>from google.adk import LlmAgent<br><br>agent = LlmAgent(<br>    name="assistant",<br>    model="gemini-2.0-flash-exp",<br>    preamble="You are a helpful coding assistant.",<br>    tools=[search_tool, calculator_tool]<br>)</div>
+                    <p style="margin-top: 10px;"><strong>Best for:</strong> Dynamic decision-making, natural language understanding, complex reasoning tasks</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Workflow Agents</div>
+                    <p>Workflow Agents orchestrate tasks using structured patterns for predictable, deterministic pipelines.</p>
+                    <br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>SequentialAgent</strong></td>
+                                <td>Executes sub-agents one after another in order</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ParallelAgent</strong></td>
+                                <td>Runs multiple sub-agents simultaneously</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LoopAgent</strong></td>
+                                <td>Repeats a sub-agent until a condition is met</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 10px;"><strong>Best for:</strong> Structured workflows, assembly-line processes, predictable multi-step tasks</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Sequential Agent Example</div>
+                    <div class="command">from google.adk import SequentialAgent<br><br># Create a pipeline of agents<br>pipeline = SequentialAgent(<br>    name="content_pipeline",<br>    agents=[<br>        research_agent,    # First: gather information<br>        writer_agent,      # Second: write draft<br>        editor_agent       # Third: edit and polish<br>    ]<br>)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Parallel Agent Example</div>
+                    <div class="command">from google.adk import ParallelAgent<br><br># Run multiple analyses at once<br>analyzer = ParallelAgent(<br>    name="multi_analyzer",<br>    agents=[<br>        sentiment_agent,<br>        keyword_agent,<br>        summary_agent<br>    ]<br>)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Agent Hierarchy</div>
+                    <p>Agents can be composed into hierarchies where parent agents delegate to sub-agents:</p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Parent agents</strong> can have multiple sub-agents</li>
+                        <li><strong>Sub-agents</strong> can only have one parent</li>
+                        <li>ADK will raise an error if you try to add an agent to multiple parents</li>
+                        <li>Use this to build modular, reusable agent teams</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Model Selection</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>gemini-2.0-flash-exp</code></td>
+                                <td>Fast responses, most tasks (recommended default)</td>
+                            </tr>
+                            <tr>
+                                <td><code>gemini-1.5-pro</code></td>
+                                <td>Complex reasoning, long context</td>
+                            </tr>
+                            <tr>
+                                <td><code>gemini-1.5-flash</code></td>
+                                <td>Quick tasks, high throughput</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section" data-category="tools">
+                <h2 class="section-title">Tools & Functions</h2>
+
+                <div class="card">
+                    <div class="card-title">What are Tools?</div>
+                    <p>Tools give agents the ability to take actions beyond text generation. They can search the web, execute code, query databases, call APIs, or perform any custom function you define.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Creating Custom Tools</div>
+                    <div class="command"># Python - Define a simple tool<br>from google.adk import tool<br><br>@tool<br>def get_weather(city: str) -> str:<br>    """Get the current weather for a city."""<br>    # Your implementation here<br>    return f"Weather in {city}: Sunny, 72°F"<br><br># Add tool to agent<br>agent = LlmAgent(<br>    name="weather_agent",<br>    model="gemini-2.0-flash-exp",<br>    tools=[get_weather]<br>)</div>
+                    <div class="tip" style="margin-top: 15px;">
+                        <div class="tip-title">💡 Tool Best Practices</div>
+                        Always include clear docstrings and type hints. The LLM uses these to understand when and how to call your tools.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Pre-built Tools</div>
+                    <p>ADK provides several built-in tools:</p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Search tools:</strong> Web search capabilities via Google Search</li>
+                        <li><strong>Code execution:</strong> Run Python code safely in a sandbox</li>
+                        <li><strong>Function calling:</strong> Structured output generation</li>
+                        <li><strong>Agent-as-tool:</strong> Use other agents as tools</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Using Agents as Tools</div>
+                    <p>One of ADK's most powerful features is using agents as tools for other agents:</p>
+                    <div class="command">from google.adk import LlmAgent<br><br># Create specialized agents<br>math_agent = LlmAgent(name="math", model="gemini-2.0-flash-exp")<br>search_agent = LlmAgent(name="search", model="gemini-2.0-flash-exp")<br><br># Main agent uses other agents as tools<br>coordinator = LlmAgent(<br>    name="coordinator",<br>    model="gemini-2.0-flash-exp",<br>    tools=[math_agent, search_agent]<br>)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Tool Execution Modes</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Auto</strong></td>
+                                <td>Agent decides when to use tools (default)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Manual</strong></td>
+                                <td>You control tool execution explicitly</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Required</strong></td>
+                                <td>Force the agent to use a specific tool</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Integrating External APIs</div>
+                    <div class="command"># Example: Create a database query tool<br>import requests<br>from google.adk import tool<br><br>@tool<br>def query_database(sql: str) -> dict:<br>    """Execute a SQL query against the database."""<br>    # Make API request to your database service<br>    response = requests.post(<br>        "https://api.example.com/query",<br>        json={"query": sql}<br>    )<br>    return response.json()</div>
+                </div>
+            </div>
+
+            <div class="section" data-category="patterns">
+                <h2 class="section-title">Multi-Agent Design Patterns</h2>
+
+                <div class="card">
+                    <div class="card-title">8 Essential Patterns</div>
+                    <p>ADK supports 8 proven design patterns for building multi-agent systems:</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pattern</th>
+                                <th>When to Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Sequential Pipeline</strong></td>
+                                <td>Linear workflows where output flows from one agent to the next</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Parallel Execution</strong></td>
+                                <td>Independent tasks that can run simultaneously</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Generator-Critic</strong></td>
+                                <td>One agent creates, another validates (e.g., write then review)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Iterative Refinement</strong></td>
+                                <td>Repeatedly improve output until quality threshold is met</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dynamic Routing</strong></td>
+                                <td>Route tasks to appropriate specialist agents based on content</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hierarchical</strong></td>
+                                <td>Manager agent delegates to worker agents</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Collaborative</strong></td>
+                                <td>Multiple agents contribute expertise to solve complex problems</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Human-in-the-loop</strong></td>
+                                <td>Agent seeks human approval before critical actions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Generator-Critic Pattern</div>
+                    <div class="command">from google.adk import SequentialAgent, LlmAgent<br><br># Generator creates content<br>generator = LlmAgent(<br>    name="writer",<br>    model="gemini-2.0-flash-exp",<br>    preamble="You are a creative writer."<br>)<br><br># Critic reviews and provides feedback<br>critic = LlmAgent(<br>    name="editor",<br>    model="gemini-2.0-flash-exp",<br>    preamble="You are a critical editor. Review for clarity and accuracy."<br>)<br><br># Combine in sequence<br>pipeline = SequentialAgent(<br>    name="content_creation",<br>    agents=[generator, critic]<br>)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Dynamic Routing Pattern</div>
+                    <div class="command">from google.adk import LlmAgent<br><br># Create specialist agents<br>technical_agent = LlmAgent(name="tech_support", ...)<br>billing_agent = LlmAgent(name="billing", ...)<br>general_agent = LlmAgent(name="general", ...)<br><br># Router agent with specialists as tools<br>router = LlmAgent(<br>    name="customer_service",<br>    model="gemini-2.0-flash-exp",<br>    preamble="Route customer inquiries to the right specialist.",<br>    tools=[technical_agent, billing_agent, general_agent]<br>)</div>
+                    <p style="margin-top: 10px;">The router agent intelligently selects which specialist to use based on the customer's question.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Iterative Refinement</div>
+                    <div class="command">from google.adk import LoopAgent<br><br># Agent refines output until quality threshold<br>refiner = LoopAgent(<br>    name="iterative_refiner",<br>    agent=quality_checker_agent,<br>    max_iterations=5,  # Safety limit<br>    exit_condition="output_meets_quality"<br>)</div>
+                    <p style="margin-top: 10px;">Set <code>max_iterations</code> to prevent infinite loops. Use <code>escalate=True</code> in agent response to exit early.</p>
+                </div>
+            </div>
+
+            <div class="section" data-category="a2a">
+                <h2 class="section-title">Agent2Agent (A2A) Protocol</h2>
+
+                <div class="card">
+                    <div class="card-title">What is A2A?</div>
+                    <p>Agent2Agent (A2A) is an open, vendor-neutral protocol developed by Google that enables AI agents to discover, communicate, and collaborate across different platforms and frameworks.</p>
+                    <br>
+                    <p><strong>Key Benefits:</strong></p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Universal interoperability:</strong> Agents work together regardless of technology</li>
+                        <li><strong>Capability discovery:</strong> Agents advertise what they can do via Agent Cards</li>
+                        <li><strong>Enterprise security:</strong> Built-in authentication and authorization</li>
+                        <li><strong>Standardized:</strong> Open specification, not vendor lock-in</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Enabling A2A in Your Agent</div>
+                    <div class="command"># Python - Make your agent A2A-compatible<br>from google.adk import LlmAgent<br><br>agent = LlmAgent(<br>    name="my_agent",<br>    model="gemini-2.0-flash-exp",<br>    enable_a2a=True  # Enable A2A protocol<br>)<br><br># Agent now exposes:<br># - POST /run endpoint for execution<br># - GET /.well-known/agent.json for metadata</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Agent Cards</div>
+                    <p>Agent Cards are JSON documents that describe an agent's capabilities, allowing other agents to discover and use them.</p>
+                    <div class="command">{<br>  "name": "Weather Agent",<br>  "description": "Provides weather forecasts",<br>  "capabilities": ["weather_lookup", "forecast"],<br>  "version": "1.0.0",<br>  "authentication": {<br>    "type": "api_key",<br>    "required": true<br>  }<br>}</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Calling Remote A2A Agents</div>
+                    <div class="command"># Connect to a remote A2A agent<br>from google.adk import RemoteAgent<br><br>remote_agent = RemoteAgent(<br>    url="https://api.example.com/agent",<br>    auth_token="your_token_here"<br>)<br><br># Use it like any other agent<br>local_agent = LlmAgent(<br>    name="coordinator",<br>    model="gemini-2.0-flash-exp",<br>    tools=[remote_agent]  # Remote agent as a tool<br>)</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">A2A Security</div>
+                    <p>A2A incorporates enterprise-grade security standards:</p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>HTTPS/TLS:</strong> All communication encrypted</li>
+                        <li><strong>JWT tokens:</strong> Secure authentication</li>
+                        <li><strong>OIDC:</strong> OpenID Connect support</li>
+                        <li><strong>API keys:</strong> Simple key-based auth</li>
+                        <li><strong>OAuth 2.0:</strong> Delegated authorization</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">A2A Protocol Version</div>
+                    <p>Current version: <strong>0.2</strong></p>
+                    <p>Latest updates include:</p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Support for stateless interactions</li>
+                        <li>Standardized authentication mechanisms</li>
+                        <li>Improved error handling</li>
+                        <li>Enhanced capability discovery</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section" data-category="tips">
+                <h2 class="section-title">Tips & Best Practices</h2>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Start with Single Agents</div>
+                    Before building multi-agent systems, perfect your individual agents. Clear preambles and well-defined tools are the foundation of successful agent systems.
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Build Teams of Specialists</div>
+                    Instead of one "do everything" agent, create focused specialist agents with clear instructions for a single job. Then orchestrate them with a coordinator agent.
+                    <div class="command"># Good: Focused specialists<br>research_agent = LlmAgent(preamble="You only research topics")<br>writing_agent = LlmAgent(preamble="You only write content")<br><br># Avoid: One agent trying to do everything</div>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Use Clear Preambles</div>
+                    The preamble (system prompt) is crucial. Be specific about:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>The agent's role and expertise</li>
+                        <li>What the agent should and shouldn't do</li>
+                        <li>Output format expectations</li>
+                        <li>Any limitations or disclaimers</li>
+                    </ul>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Safety & Trust</div>
+                    <div class="command"># Include safety reminders in preambles<br>preamble = """You are a financial advisor assistant.<br>IMPORTANT: You provide information, not financial advice.<br>Always remind users to consult with professionals.<br>If uncertain, say so clearly."""</div>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Monitor and Log</div>
+                    Always log agent interactions for debugging and monitoring:
+                    <div class="command">import logging<br><br>logging.basicConfig(level=logging.INFO)<br>logger = logging.getLogger(__name__)<br><br>response = agent.run(prompt)<br>logger.info(f"Agent response: {response}")</div>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Handle Errors Gracefully</div>
+                    <div class="command">try:<br>    response = agent.run(prompt)<br>except Exception as e:<br>    # Provide fallback behavior<br>    response = "I'm having trouble processing that. Please try again."<br>    logger.error(f"Agent error: {e}")</div>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Test with Edge Cases</div>
+                    Test your agents with:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Empty or malformed inputs</li>
+                        <li>Very long inputs (context limits)</li>
+                        <li>Ambiguous requests</li>
+                        <li>Requests outside agent expertise</li>
+                        <li>Concurrent requests (if applicable)</li>
+                    </ul>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Use Version Control</div>
+                    Track your agent configurations, preambles, and tool definitions in version control. Treat agent prompts like code—they need versioning and review.
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Optimize for Cost</div>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Use <code>gemini-1.5-flash</code> for simple tasks</li>
+                        <li>Cache frequently used context</li>
+                        <li>Keep prompts concise</li>
+                        <li>Use workflow agents for deterministic steps (no LLM needed)</li>
+                    </ul>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">💡 Deploy with Agent Engine</div>
+                    Use Google's Agent Engine to deploy your ADK agents to production:
+                    <div class="command"># Deploy to Agent Engine<br>adk deploy --project your-project-id --region us-central1</div>
+                    Agent Engine provides hosting, scaling, monitoring, and A2A endpoints automatically.
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Common Gotchas</div>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Agent hierarchy:</strong> An agent can only have one parent. Trying to reuse sub-agents in multiple parents will raise an error.</li>
+                        <li><strong>Context limits:</strong> Even with large context models, monitor token usage. Long conversations can exceed limits.</li>
+                        <li><strong>Tool descriptions:</strong> LLMs rely on tool docstrings to understand when to call them. Vague descriptions lead to wrong tool selection.</li>
+                        <li><strong>Infinite loops:</strong> Always set <code>max_iterations</code> on LoopAgent to prevent runaway agents.</li>
+                        <li><strong>Stateless by default:</strong> Agents don't persist memory between runs unless you explicitly implement state management.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Getting Help</div>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li><strong>Official Documentation:</strong> <a href="https://google.github.io/adk-docs/" target="_blank">google.github.io/adk-docs</a></li>
+                        <li><strong>Google Cloud Docs:</strong> <a href="https://cloud.google.com/agent-builder/agent-development-kit/overview" target="_blank">cloud.google.com/agent-builder</a></li>
+                        <li><strong>GitHub Python:</strong> <a href="https://github.com/google/adk-python" target="_blank">github.com/google/adk-python</a></li>
+                        <li><strong>Sample Projects:</strong> <a href="https://github.com/google/adk-samples" target="_blank">github.com/google/adk-samples</a></li>
+                        <li><strong>Google Codelabs:</strong> Hands-on tutorials at <a href="https://codelabs.developers.google.com/" target="_blank">codelabs.developers.google.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="no-results" id="noResults" style="display: none;">
+                <p>No results found. Try a different search term or filter.</p>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-title">Ideas to Life</div>
+                <div class="footer-subtitle">Published by Alexandre Franco · <a href="https://ideas-to-life.ai" target="_blank">ideas-to-life.ai</a></div>
+                <div class="footer-tagline">
+                    Turning ideas into consumer experiences with Generative AI.<br>
+                    — Built with transparency. Shipped with intent.
+                </div>
+                <div class="footer-links">
+                    <span>© 2026 Ideas to Life. All rights reserved.</span>
+                    <span>·</span>
+                    <a href="#" target="_blank">RSS</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const content = document.getElementById('content');
+        const sections = document.querySelectorAll('.section');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const noResults = document.getElementById('noResults');
+
+        let currentFilter = 'all';
+
+        // Search functionality
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filterContent(searchTerm, currentFilter);
+        });
+
+        // Filter buttons
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentFilter = button.dataset.filter;
+                filterContent(searchBox.value.toLowerCase(), currentFilter);
+            });
+        });
+
+        function filterContent(searchTerm, filter) {
+            let visibleCount = 0;
+
+            sections.forEach(section => {
+                const category = section.dataset.category;
+
+                // Check if category matches the filter
+                const matchesFilter = filter === 'all' || category === filter;
+
+                // For search, check both section title and individual cards
+                let matchesSearch = searchTerm === '';
+                let hasMatchingCards = false;
+
+                if (searchTerm !== '') {
+                    const sectionTitle = section.querySelector('.section-title').textContent.toLowerCase();
+                    const cards = section.querySelectorAll('.card, .tip');
+
+                    // Check section title
+                    if (sectionTitle.includes(searchTerm)) {
+                        matchesSearch = true;
+                    }
+
+                    // Check individual cards and hide/show them
+                    cards.forEach(card => {
+                        const cardText = card.textContent.toLowerCase();
+                        if (cardText.includes(searchTerm)) {
+                            card.style.display = 'block';
+                            matchesSearch = true;
+                            hasMatchingCards = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                } else {
+                    // Show all cards when no search term
+                    const cards = section.querySelectorAll('.card, .tip');
+                    cards.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                }
+
+                if (matchesSearch && matchesFilter) {
+                    section.classList.remove('hidden');
+                    visibleCount++;
+
+                    // Highlight search term
+                    if (searchTerm !== '') {
+                        highlightText(section, searchTerm);
+                    } else {
+                        removeHighlights(section);
+                    }
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        function highlightText(element, searchTerm) {
+            const cards = element.querySelectorAll('.card, .tip');
+            cards.forEach(card => {
+                const cardTitle = card.querySelector('.card-title, .tip-title');
+                if (cardTitle) {
+                    const text = cardTitle.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.borderLeftColor = '#ffc107';
+                        card.style.background = '#fff9e6';
+                    }
+                }
+            });
+        }
+
+        function removeHighlights(element) {
+            const cards = element.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.borderLeftColor = '#667eea';
+                card.style.background = '#f8f9fa';
+            });
+            const tips = element.querySelectorAll('.tip');
+            tips.forEach(tip => {
+                tip.style.borderLeftColor = '#ffc107';
+                tip.style.background = '#fff3cd';
+            });
+        }
+
+        // Add copy functionality to code blocks
+        document.querySelectorAll('.command').forEach(cmd => {
+            cmd.style.cursor = 'pointer';
+            cmd.title = 'Click to copy';
+            cmd.addEventListener('click', () => {
+                const text = cmd.textContent.replace(/\s+/g, ' ').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = cmd.style.background;
+                    cmd.style.background = '#4caf50';
+                    setTimeout(() => {
+                        cmd.style.background = original;
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
