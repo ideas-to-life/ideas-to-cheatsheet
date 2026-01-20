@@ -18,6 +18,11 @@ Claude should treat this file as authoritative project context and follow it bef
 
 **ideas-to-cheatsheet** is an experiment within the Ideas to Life initiative.
 
+For canonical Ideas to Life experiment guardrails, see **experiments-charter.md (platform-level charter)**:
+- https://github.com/ideas-to-life/ideas-to-life-prompts/blob/main/governance/experiments-charter.md
+
+Note: this repo may also include a local `EXPERIMENTS.md` pointer file for convenience, but the platform-level charter above is the source of truth.
+
 ### Purpose
 - Transform a rough idea or prompt into a clear, concise, interactive cheat sheet
 - Optimized for learning, sharing, and signal gathering
