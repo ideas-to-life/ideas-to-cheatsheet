@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI Architecture Patterns</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1f3a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header-brand-logo {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-brand-logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        .header-brand-logo img { height: 40px; width: auto; display: block; }
+        .header-brand-text { font-size: 1.3rem; font-weight: 600; letter-spacing: 0.5px; }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { opacity: 0.9; font-size: 1.1rem; }
+
+        /* ── SEARCH ── */
+        .search-section {
+            padding: 30px 40px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118,75,162,0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* ── CONTENT ── */
+        .content { padding: 40px; }
+
+        .section { margin-bottom: 40px; transition: opacity 0.3s; }
+        .section.hidden { display: none; }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2d3561;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            line-height: 1.7;
+        }
+
+        .card:hover { background: #e9ecef; transform: translateX(5px); }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #2d3561;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .card p { margin-bottom: 10px; }
+        .card ul, .card ol { margin: 8px 0 10px 22px; }
+        .card li { margin-bottom: 6px; }
+        .card a { color: #667eea; text-decoration: none; }
+        .card a:hover { text-decoration: underline; }
+
+        /* ── TIPS ── */
+        .tip {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 18px;
+            margin: 15px 0;
+            border-radius: 6px;
+            line-height: 1.7;
+        }
+
+        .tip-title { font-weight: 700; color: #856404; margin-bottom: 6px; }
+
+        /* ── PATTERN CARDS ── */
+        .pattern-card {
+            border-radius: 10px;
+            padding: 22px 24px;
+            margin-bottom: 18px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            line-height: 1.7;
+        }
+
+        .pattern-card:hover { transform: translateX(5px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+        .pattern-card.blue   { background: #eff6ff; border-color: #3b82f6; }
+        .pattern-card.green  { background: #f0fdf4; border-color: #22c55e; }
+        .pattern-card.amber  { background: #fffbeb; border-color: #f59e0b; }
+        .pattern-card.purple { background: #faf5ff; border-color: #a855f7; }
+        .pattern-card.red    { background: #fef2f2; border-color: #ef4444; }
+        .pattern-card.teal   { background: #f0fdfa; border-color: #14b8a6; }
+
+        .pattern-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .pattern-card.blue   .pattern-name { color: #1d4ed8; }
+        .pattern-card.green  .pattern-name { color: #15803d; }
+        .pattern-card.amber  .pattern-name { color: #b45309; }
+        .pattern-card.purple .pattern-name { color: #7e22ce; }
+        .pattern-card.red    .pattern-name { color: #b91c1c; }
+        .pattern-card.teal   .pattern-name { color: #0f766e; }
+
+        .pattern-tagline {
+            font-style: italic;
+            opacity: 0.75;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .pattern-box {
+            background: rgba(255,255,255,0.7);
+            border-radius: 6px;
+            padding: 12px 14px;
+        }
+
+        .pattern-box-title {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
+            opacity: 0.7;
+        }
+
+        .pattern-box p, .pattern-box li { font-size: 0.92rem; }
+        .pattern-box ul { margin-left: 16px; }
+        .pattern-box li { margin-bottom: 3px; }
+
+        /* ── COMPLEXITY BADGE ── */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .badge-low    { background: #d1fae5; color: #065f46; }
+        .badge-medium { background: #fef3c7; color: #92400e; }
+        .badge-high   { background: #fee2e2; color: #991b1b; }
+
+        /* ── DECISION FLOW ── */
+        .decision-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 18px;
+        }
+
+        .decision-flow-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3561;
+            margin-bottom: 16px;
+        }
+
+        .flow-step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .flow-q {
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .flow-content { flex: 1; }
+        .flow-question { font-weight: 600; color: #2d3561; margin-bottom: 4px; }
+
+        .flow-answers {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .flow-answer {
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .flow-answer.yes  { background: #d1fae5; color: #065f46; }
+        .flow-answer.no   { background: #fee2e2; color: #991b1b; }
+        .flow-answer.sometimes { background: #fef3c7; color: #92400e; }
+
+        /* ── TABLE ── */
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; font-size: 0.93rem; }
+        th { background: #667eea; color: white; font-weight: 600; }
+        tr:hover td { background: #f0f4ff; }
+
+        /* ── NO RESULTS ── */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #000;
+            color: #808080;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-content { max-width: 800px; margin: 0 auto; }
+        .footer-title { color: white; font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .footer-subtitle { color: #808080; margin-bottom: 20px; line-height: 1.6; }
+        .footer-tagline { font-style: italic; color: #808080; margin: 20px 0; line-height: 1.8; }
+
+        .footer-links {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        footer a { color: #808080; text-decoration: none; transition: color 0.3s; }
+        footer a:hover { color: #667eea; }
+
+        /* ── INTERACTIVE SELECTOR ── */
+        .selector-step { margin-bottom: 25px; }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+            margin: 20px 0;
+        }
+
+        .scenario-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .scenario-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.2);
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        }
+
+        .scenario-icon { font-size: 3rem; margin-bottom: 12px; }
+        .scenario-title { font-size: 1.2rem; font-weight: 700; color: #2d3561; margin-bottom: 8px; }
+        .scenario-desc { font-size: 0.9rem; color: #6c757d; line-height: 1.5; }
+
+        .question-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3561;
+            margin-bottom: 14px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .answer-option {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .answer-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .answer-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .primary-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .primary-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .secondary-btn:hover {
+            background: #f0f4ff;
+        }
+
+        /* ── PATH SELECTOR ── */
+        .path-btn {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .path-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .path-btn-active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .scenario-content { margin-top: 20px; }
+
+        /* ── TRADE-OFF SLIDERS ── */
+        .tradeoff-sliders { display: flex; flex-direction: column; gap: 25px; }
+
+        .slider-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2d3561;
+        }
+
+        .tradeoff-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #667eea, #22c55e);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .tradeoff-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2d3561;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .tradeoff-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2d3561;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border: none;
+        }
+
+        .slider-hint {
+            font-size: 0.75rem;
+            color: #6c757d;
+            font-style: italic;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .content { padding: 20px; }
+            .search-section { padding: 20px; }
+            .pattern-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <header>
+        <div class="provenance">An Ideas to Life experiment</div>
+        <h1>🤖 Agentic AI Architecture Patterns Cheat Sheet</h1>
+        <p class="subtitle">A decision guide for choosing the right architecture for your AI system</p>
+    </header>
+
+    <!-- SEARCH & FILTER -->
+    <div class="search-section">
+        <input type="text" id="searchBox" class="search-box" placeholder="Search patterns, use cases, trade-offs...">
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="foundations">Foundations</button>
+            <button class="filter-btn" data-filter="decision">Decision Guide</button>
+            <button class="filter-btn" data-filter="patterns">The Patterns</button>
+            <button class="filter-btn" data-filter="comparison">Comparison</button>
+            <button class="filter-btn" data-filter="pitfalls">Pitfalls</button>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="content">
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- INTERACTIVE PATTERN SELECTOR              -->
+        <!-- ══════════════════════════════════════════ -->
+        <div class="section" data-category="selector" id="patternSelector">
+            <h2 class="section-title">🎯 Find Your Pattern — Interactive Selector</h2>
+
+            <!-- STEP 1: SCENARIO PICKER -->
+            <div id="scenarioPicker" class="selector-step">
+                <div class="card">
+                    <div class="card-title">Choose Your Path</div>
+                    <p style="margin-bottom:20px;">Pick the approach that feels most natural to you:</p>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:25px;">
+                        <button id="pathScenario" class="path-btn path-btn-active">
+                            <div style="font-size:2rem; margin-bottom:8px;">🎯</div>
+                            <div style="font-weight:700; margin-bottom:4px;">Scenario-Based</div>
+                            <div style="font-size:0.85rem; opacity:0.8;">"What am I building?"</div>
+                        </button>
+                        <button id="pathTradeoffs" class="path-btn">
+                            <div style="font-size:2rem; margin-bottom:8px;">⚖️</div>
+                            <div style="font-weight:700; margin-bottom:4px;">Trade-Off Based</div>
+                            <div style="font-size:0.85rem; opacity:0.8;">"What do I optimize for?"</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SCENARIO GRID -->
+                <div id="scenarioGrid" class="scenario-content">
+                    <div class="card" style="margin-bottom:15px;">
+                        <p style="font-weight:600;">Which scenario best describes what you're building?</p>
+                    </div>
+                    <div class="scenario-grid">
+                        <div class="scenario-card" data-scenario="support-bot">
+                            <div class="scenario-icon">💬</div>
+                            <div class="scenario-title">Customer Support Bot</div>
+                            <div class="scenario-desc">Answer questions, look up orders, check policies, draft responses</div>
+                        </div>
+                        <div class="scenario-card" data-scenario="content-pipeline">
+                            <div class="scenario-icon">📝</div>
+                            <div class="scenario-title">Content Generation Pipeline</div>
+                            <div class="scenario-desc">Research topics, draft articles, edit for style, format for publication</div>
+                        </div>
+                        <div class="scenario-card" data-scenario="coding-assistant">
+                            <div class="scenario-icon">💻</div>
+                            <div class="scenario-title">Coding Assistant</div>
+                            <div class="scenario-desc">Write code, run tests, review quality, document functions</div>
+                        </div>
+                        <div class="scenario-card" data-scenario="doc-analysis">
+                            <div class="scenario-icon">📊</div>
+                            <div class="scenario-title">Batch Document Analysis</div>
+                            <div class="scenario-desc">Process hundreds of documents, extract insights, synthesise findings</div>
+                        </div>
+                        <div class="scenario-card" data-scenario="research-synthesis">
+                            <div class="scenario-icon">🔬</div>
+                            <div class="scenario-title">Research & Synthesis</div>
+                            <div class="scenario-desc">Deep research across sources, fact-check claims, produce comprehensive reports</div>
+                        </div>
+                        <div class="scenario-card" data-scenario="workflow-automation">
+                            <div class="scenario-icon">⚙️</div>
+                            <div class="scenario-title">Workflow Automation</div>
+                            <div class="scenario-desc">Multi-step business process with decisions, approvals, and handoffs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRADE-OFF CONFIGURATOR -->
+                <div id="tradeoffGrid" class="scenario-content" style="display:none;">
+                    <div class="card" style="margin-bottom:20px;">
+                        <p style="font-weight:600; margin-bottom:15px;">Adjust the sliders to reflect your priorities:</p>
+                        <div class="tradeoff-sliders">
+                            <div class="slider-group">
+                                <div class="slider-labels">
+                                    <span>Low Cost</span>
+                                    <span>High Quality</span>
+                                </div>
+                                <input type="range" id="costQuality" min="0" max="100" value="50" class="tradeoff-slider">
+                                <div class="slider-hint">Left = minimize cost, Right = maximize quality</div>
+                            </div>
+                            <div class="slider-group">
+                                <div class="slider-labels">
+                                    <span>Speed</span>
+                                    <span>Reliability</span>
+                                </div>
+                                <input type="range" id="speedReliability" min="0" max="100" value="50" class="tradeoff-slider">
+                                <div class="slider-hint">Left = fast response, Right = bulletproof accuracy</div>
+                            </div>
+                            <div class="slider-group">
+                                <div class="slider-labels">
+                                    <span>Simplicity</span>
+                                    <span>Autonomy</span>
+                                </div>
+                                <input type="range" id="simplicityAutonomy" min="0" max="100" value="50" class="tradeoff-slider">
+                                <div class="slider-hint">Left = easy to build/maintain, Right = high agent independence</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:center;">
+                            <div>
+                                <div style="font-weight:700; font-size:1.1rem; margin-bottom:10px;">Based on your priorities:</div>
+                                <div id="tradeoffRecommendation" style="font-size:1.3rem; color:#667eea; font-weight:700; margin-bottom:10px;">
+                                    Move the sliders...
+                                </div>
+                                <div id="tradeoffReasoning" style="font-size:0.9rem; line-height:1.6; color:#6c757d;">
+                                    Adjust the sliders above to see which pattern best matches your priorities.
+                                </div>
+                                <button id="continueFromTradeoff" class="primary-btn" style="margin-top:15px; display:none;">
+                                    Continue with This Pattern
+                                </button>
+                            </div>
+                            <div>
+                                <canvas id="radarChart" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: QUESTIONNAIRE -->
+            <div id="questionnaire" class="selector-step" style="display:none;">
+                <div class="card">
+                    <div class="card-title">A few quick questions to refine the recommendation...</div>
+                    <p style="margin-bottom:20px;">Selected scenario: <strong id="selectedScenario"></strong></p>
+                </div>
+
+                <div id="questionContainer"></div>
+
+                <button id="getRecommendation" class="primary-btn">Get My Recommendation</button>
+            </div>
+
+            <!-- STEP 3: RECOMMENDATION -->
+            <div id="recommendation" class="selector-step" style="display:none;">
+                <div class="card" style="border-left: 6px solid #22c55e; background: #f0fdf4;">
+                    <div class="card-title" style="color: #15803d;">✓ Recommended Pattern</div>
+                    <div id="recommendedPattern" style="font-size:1.5rem; font-weight:700; margin:10px 0; color: #15803d;"></div>
+                    
+                    <!-- VISUAL DIAGRAM -->
+                    <div id="patternDiagram" style="background:white; border-radius:8px; padding:20px; margin:15px 0; text-align:center;">
+                        <canvas id="diagramCanvas" width="600" height="200"></canvas>
+                    </div>
+
+                    <div id="recommendationReasoning" style="line-height:1.8; margin-top:15px;">
+                        <div style="opacity:0.7; font-style:italic; margin-bottom:10px;">Getting personalised explanation from Claude...</div>
+                    </div>
+                </div>
+
+                <div class="tip" id="alternativePatterns" style="display:none;">
+                    <div class="tip-title">🤔 Alternative Patterns to Consider</div>
+                    <div id="alternativesContent"></div>
+                </div>
+
+                <div style="text-align:center; margin-top:20px;">
+                    <button id="startOver" class="secondary-btn">Start Over</button>
+                    <button id="learnMore" class="primary-btn">Learn More About This Pattern</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 1 · FOUNDATIONS                   -->
+        <!-- ══════════════════════════════════════════ -->
+        <div class="section" data-category="foundations">
+            <h2 class="section-title">Foundations — What Makes a System "Agentic"?</h2>
+
+            <div class="card">
+                <div class="card-title">The Core Idea in One Sentence</div>
+                <p>An agentic AI system is one where the model doesn't just respond — it <strong>plans, decides, and acts</strong> across multiple steps to achieve a goal, often using tools, memory, and other agents along the way.</p>
+                <p>Think of it like the difference between a calculator (you do all the thinking, it executes one step) and an accountant (you give them a goal, they figure out the steps themselves). The move from calculator to accountant is the move from "LLM call" to "agentic system".</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">The Four Agentic Properties</div>
+                <p>A system becomes more agentic as it gains more of these four properties. Understanding which ones your use case needs is the first step toward choosing the right architecture.</p>
+                <ul>
+                    <li><strong>Planning:</strong> The ability to break a goal into sub-tasks and sequence them — even if the sequence wasn't known upfront.</li>
+                    <li><strong>Tool Use:</strong> The ability to take actions in the world — searching the web, writing files, calling APIs, executing code.</li>
+                    <li><strong>Memory:</strong> The ability to retain and recall information across steps or sessions — from simple context windows to long-term vector stores.</li>
+                    <li><strong>Multi-step Autonomy:</strong> The ability to run a chain of reasoning/action loops without a human approving every step.</li>
+                </ul>
+            </div>
+
+            <div class="tip">
+                <div class="tip-title">💡 Mental Model Before You Begin</div>
+                Ask yourself: <em>"On a scale from 'vending machine' to 'employee', how much autonomous judgement does my system need?"</em> A vending machine executes exactly what you press. An employee interprets your goal, makes decisions, handles surprises, and reports back. Most agentic systems live somewhere in between — and your architecture should match exactly where on that scale you need to sit.
+            </div>
+
+            <div class="card">
+                <div class="card-title">Why Architecture Choice Matters More Than Model Choice</div>
+                <p>Developers often obsess over which LLM to use, but for agentic systems, the architecture — how you connect, orchestrate, and constrain your agents — has a far greater impact on reliability, cost, and maintainability.</p>
+                <p>A well-architected system with a mid-tier model will outperform a poorly-architected system using the most powerful model available. Architecture defines how failures propagate, how errors get corrected, how costs scale, and how humans stay in control.</p>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 2 · DECISION GUIDE                -->
+        <!-- ══════════════════════════════════════════ -->
+        <div class="section" data-category="decision">
+            <h2 class="section-title">Decision Guide — The Questions to Ask First</h2>
+
+            <div class="decision-flow">
+                <div class="decision-flow-title">Work through these questions in order — your answers narrow the field of suitable patterns.</div>
+
+                <div class="flow-step">
+                    <div class="flow-q">1</div>
+                    <div class="flow-content">
+                        <div class="flow-question">Is the task well-defined with a predictable, linear sequence of steps?</div>
+                        <p style="font-size:0.9rem;margin-top:4px;">E.g. "summarise this document" vs "research and write a market report"</p>
+                        <div class="flow-answers">
+                            <span class="flow-answer yes">Yes → Consider Pipeline or Single Agent</span>
+                            <span class="flow-answer no">No → Consider Orchestrator or Swarm patterns</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-q">2</div>
+                    <div class="flow-content">
+                        <div class="flow-question">Does the task require specialised skills that benefit from separation of concerns?</div>
+                        <p style="font-size:0.9rem;margin-top:4px;">E.g. coding + security review + documentation are very different skill profiles</p>
+                        <div class="flow-answers">
+                            <span class="flow-answer yes">Yes → Consider Multi-Agent (Orchestrator-Subagents)</span>
+                            <span class="flow-answer no">No → A single capable agent may suffice</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-q">3</div>
+                    <div class="flow-content">
+                        <div class="flow-question">Can tasks be run in parallel, or must they be strictly sequential?</div>
+                        <p style="font-size:0.9rem;margin-top:4px;">E.g. researching 5 companies simultaneously vs building on each prior finding</p>
+                        <div class="flow-answers">
+                            <span class="flow-answer yes">Parallelisable → Parallelisation or Swarm patterns</span>
+                            <span class="flow-answer no">Sequential → Pipeline or Orchestrator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-q">4</div>
+                    <div class="flow-content">
+                        <div class="flow-question">How high is the cost of an error? Are actions reversible?</div>
+                        <p style="font-size:0.9rem;margin-top:4px;">Sending an email is irreversible. Generating a draft is not.</p>
+                        <div class="flow-answers">
+                            <span class="flow-answer no">High risk / irreversible → Mandatory Human-in-the-Loop checkpoints</span>
+                            <span class="flow-answer yes">Low risk / reversible → More autonomy is acceptable</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-q">5</div>
+                    <div class="flow-content">
+                        <div class="flow-question">Does quality need to be validated before the output is used?</div>
+                        <p style="font-size:0.9rem;margin-top:4px;">E.g. generated code that must actually run, or a report that needs fact-checking</p>
+                        <div class="flow-answers">
+                            <span class="flow-answer yes">Yes → Add an Evaluator agent or reflection loop</span>
+                            <span class="flow-answer sometimes">Sometimes → Build in optional review gates</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-q">6</div>
+                    <div class="flow-content">
+                        <div class="flow-question">Do you need to optimise through iteration — not just execute once?</div>
+                        <p style="font-size:0.9rem;margin-top:4px;">E.g. prompt refinement, code debugging, creative writing improvement cycles</p>
+                        <div class="flow-answers">
+                            <span class="flow-answer yes">Yes → Optimiser or Generator-Evaluator loop</span>
+                            <span class="flow-answer no">No → Avoid loops — they add cost and latency</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip">
+                <div class="tip-title">💡 The Golden Rule of Agentic Design</div>
+                <strong>Start with the simplest architecture that could possibly work, then add complexity only when you hit a clear limitation.</strong> Most teams jump straight to multi-agent orchestration when a well-prompted single agent with a few tools would have solved the problem cheaper, faster, and with fewer failure modes. Complexity should be earned, not assumed.
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 3 · THE PATTERNS                  -->
+        <!-- ══════════════════════════════════════════ -->
+        <div class="section" data-category="patterns">
+            <h2 class="section-title">The Patterns — A Practical Field Guide</h2>
+
+            <!-- 1. SINGLE AGENT -->
+            <div class="pattern-card blue">
+                <div class="pattern-name">1. Single Agent with Tools <span class="badge badge-low">Low Complexity</span></div>
+                <div class="pattern-tagline">"One capable generalist with the right equipment"</div>
+                <p>One LLM instance that reasons over a task and invokes tools (search, code execution, file I/O, APIs) as needed. The model decides when and how to use each tool, forming a think → act → observe loop until the task is complete.</p>
+                <div class="pattern-grid">
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">✅ Use When</div>
+                        <ul>
+                            <li>Task is self-contained and well-scoped</li>
+                            <li>A single context window is sufficient</li>
+                            <li>Toolset covers all needed actions</li>
+                            <li>You want simplicity and low latency</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">❌ Avoid When</div>
+                        <ul>
+                            <li>Task exceeds the context window</li>
+                            <li>Specialised skills are required at each step</li>
+                            <li>Errors in one step cascade catastrophically</li>
+                            <li>Parallelism would significantly reduce time</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">🌍 Real Example</div>
+                        <p>A customer support agent that looks up order details, checks policy docs, and drafts a personalised reply — all in one pass.</p>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">⚠️ Key Risk</div>
+                        <p>Tool call loops can spiral. Always set a maximum iteration count to prevent runaway execution and unexpected costs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PIPELINE -->
+            <div class="pattern-card green">
+                <div class="pattern-name">2. Pipeline (Sequential Chain) <span class="badge badge-low">Low Complexity</span></div>
+                <div class="pattern-tagline">"An assembly line where each station transforms the work"</div>
+                <p>A fixed sequence of LLM calls where the output of each step becomes the input of the next. No dynamic routing — the flow is defined at design time. Each step can be a different prompt, model, or even a non-LLM transformation.</p>
+                <div class="pattern-grid">
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">✅ Use When</div>
+                        <ul>
+                            <li>The workflow is predictable and deterministic</li>
+                            <li>Each step genuinely improves quality (e.g. draft → critique → refine)</li>
+                            <li>You need easy observability and debugging</li>
+                            <li>Different steps benefit from different system prompts</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">❌ Avoid When</div>
+                        <ul>
+                            <li>The number of steps is unknown upfront</li>
+                            <li>Intermediate steps need to branch based on content</li>
+                            <li>Latency is critical (each step adds time)</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">🌍 Real Example</div>
+                        <p>A content pipeline: Extract topics → Research each topic → Draft section → Edit for style → Format for publication.</p>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">⚠️ Key Risk</div>
+                        <p>Error amplification — a mistake in step 2 gets refined and polished by steps 3–5, making it harder to detect. Add validation gates between stages.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. ORCHESTRATOR-SUBAGENTS -->
+            <div class="pattern-card purple">
+                <div class="pattern-name">3. Orchestrator + Subagents <span class="badge badge-medium">Medium Complexity</span></div>
+                <div class="pattern-tagline">"A manager who delegates to specialists"</div>
+                <p>A central orchestrator agent breaks the goal into sub-tasks and dispatches them to specialised subagents. Each subagent has a narrow, deep focus. The orchestrator collects results, handles errors, and decides on next steps dynamically — it's the brain; the subagents are the hands.</p>
+                <div class="pattern-grid">
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">✅ Use When</div>
+                        <ul>
+                            <li>Task complexity exceeds a single agent's context</li>
+                            <li>Specialist subagents (coder, researcher, writer) add real value</li>
+                            <li>The path to completion is dynamic, not known upfront</li>
+                            <li>You need fault isolation between components</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">❌ Avoid When</div>
+                        <ul>
+                            <li>The task is simple enough for a single agent</li>
+                            <li>Orchestration latency/cost is unacceptable</li>
+                            <li>You lack observability tools to debug multi-agent flows</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">🌍 Real Example</div>
+                        <p>A software development agent: Orchestrator plans the feature → Coder subagent writes code → Tester subagent runs tests → Reviewer subagent checks style → Orchestrator reports back.</p>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">⚠️ Key Risk</div>
+                        <p>The orchestrator is a single point of failure. If it loses track of state or misinterprets a subagent's output, the whole task degrades. Invest heavily in its system prompt and context management.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. PARALLELISATION -->
+            <div class="pattern-card amber">
+                <div class="pattern-name">4. Parallelisation <span class="badge badge-medium">Medium Complexity</span></div>
+                <div class="pattern-tagline">"Many workers tackling different parts of the same job simultaneously"</div>
+                <p>Multiple agents (or LLM calls) run concurrently on independent sub-tasks and their results are aggregated. Ideal when a large task can be decomposed into independent chunks that don't need each other's output to proceed.</p>
+                <div class="pattern-grid">
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">✅ Use When</div>
+                        <ul>
+                            <li>Sub-tasks are independent of each other</li>
+                            <li>Latency reduction is a priority</li>
+                            <li>You want multiple independent opinions or perspectives</li>
+                            <li>Large inputs need to be chunked and processed separately</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">❌ Avoid When</div>
+                        <ul>
+                            <li>Sub-tasks have dependencies on each other</li>
+                            <li>Cost is constrained (parallel = multiple concurrent LLM calls)</li>
+                            <li>Aggregating results is non-trivial or lossy</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">🌍 Real Example</div>
+                        <p>Analysing 50 customer interviews simultaneously — each agent handles one transcript, then results are synthesised into themes by a final aggregation call.</p>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">⚠️ Key Risk</div>
+                        <p>The aggregation step is often underestimated. Combining 10 independent summaries into one coherent output requires a skilled final prompt — it's not just concatenation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. EVALUATOR-OPTIMISER -->
+            <div class="pattern-card teal">
+                <div class="pattern-name">5. Generator + Evaluator (Reflection Loop) <span class="badge badge-medium">Medium Complexity</span></div>
+                <div class="pattern-tagline">"A writer and an editor in a continuous improvement cycle"</div>
+                <p>A Generator agent produces an output; an Evaluator agent critiques it against specific criteria and feeds structured feedback back to the Generator. This loop continues until the Evaluator's criteria are met or a max iteration count is reached.</p>
+                <div class="pattern-grid">
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">✅ Use When</div>
+                        <ul>
+                            <li>Quality can be objectively evaluated (tests pass, rubric met)</li>
+                            <li>First-pass output is rarely good enough</li>
+                            <li>Iterative refinement has diminishing returns you can detect</li>
+                            <li>The generator and evaluator benefit from different personas/prompts</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">❌ Avoid When</div>
+                        <ul>
+                            <li>There is no clear, automatable success criterion</li>
+                            <li>Loop cost/latency is unacceptable</li>
+                            <li>The evaluator itself is unreliable or biased</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">🌍 Real Example</div>
+                        <p>Code generation: Generator writes a function → Evaluator runs unit tests and returns failing cases → Generator fixes and retries → loop ends when all tests pass.</p>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">⚠️ Key Risk</div>
+                        <p>Infinite loops and "sycophantic drift" — the evaluator starts approving outputs to end the loop. Always enforce a hard iteration limit and log each cycle.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. SWARM -->
+            <div class="pattern-card red">
+                <div class="pattern-name">6. Swarm (Peer-to-Peer Multi-Agent) <span class="badge badge-high">High Complexity</span></div>
+                <div class="pattern-tagline">"A team that self-organises without a central manager"</div>
+                <p>Multiple peer agents collaborate, share context, and hand off tasks to each other without a single central orchestrator. Each agent decides when to act, when to defer, and when to call on a peer. Coordination emerges from the agents' interactions.</p>
+                <div class="pattern-grid">
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">✅ Use When</div>
+                        <ul>
+                            <li>Tasks are highly dynamic and unpredictable</li>
+                            <li>No single agent can have all necessary context</li>
+                            <li>You need resilience — no central point of failure</li>
+                            <li>Agents have genuinely complementary, peer-level expertise</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">❌ Avoid When</div>
+                        <ul>
+                            <li>You need deterministic, auditable behaviour</li>
+                            <li>Cost and latency are tightly constrained</li>
+                            <li>Your observability tooling is immature</li>
+                            <li>The task is well-defined (massive overkill)</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">🌍 Real Example</div>
+                        <p>An autonomous research team: Researcher, Fact-Checker, Devil's Advocate, and Synthesiser agents debate findings, challenge each other's conclusions, and converge on an answer.</p>
+                    </div>
+                    <div class="pattern-box">
+                        <div class="pattern-box-title">⚠️ Key Risk</div>
+                        <p>Emergent chaos — agents can contradict each other, loop endlessly, or amplify each other's errors. This pattern requires the most mature engineering foundations to deploy safely.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 4 · COMPARISON                    -->
+        <!-- ══════════════════════════════════════════ -->
+        <div class="section" data-category="comparison">
+            <h2 class="section-title">Side-by-Side Comparison</h2>
+
+            <div class="card">
+                <div class="card-title">Patterns at a Glance</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Autonomy</th>
+                            <th>Complexity</th>
+                            <th>Cost</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Single Agent + Tools</strong></td>
+                            <td>Medium</td>
+                            <td>Low</td>
+                            <td>Low</td>
+                            <td>Self-contained tasks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pipeline</strong></td>
+                            <td>Low</td>
+                            <td>Low</td>
+                            <td>Low–Med</td>
+                            <td>Predictable, staged workflows</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Orchestrator + Subagents</strong></td>
+                            <td>High</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                            <td>Complex, dynamic multi-step tasks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Parallelisation</strong></td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                            <td>Medium–High</td>
+                            <td>Large, decomposable tasks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Generator + Evaluator</strong></td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                            <td>Quality-critical outputs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Swarm</strong></td>
+                            <td>Very High</td>
+                            <td>High</td>
+                            <td>High</td>
+                            <td>Open-ended, adversarial tasks</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Choosing by Use Case</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Use Case</th>
+                            <th>Recommended Pattern</th>
+                            <th>Why</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Customer support bot</td>
+                            <td>Single Agent + Tools</td>
+                            <td>Contained, tool-driven, low risk</td>
+                        </tr>
+                        <tr>
+                            <td>Blog post generation</td>
+                            <td>Pipeline</td>
+                            <td>Predictable stages: research → draft → edit</td>
+                        </tr>
+                        <tr>
+                            <td>Software development assistant</td>
+                            <td>Orchestrator + Subagents</td>
+                            <td>Specialist skills, dynamic planning</td>
+                        </tr>
+                        <tr>
+                            <td>Batch document analysis</td>
+                            <td>Parallelisation</td>
+                            <td>Independent docs, speed matters</td>
+                        </tr>
+                        <tr>
+                            <td>Code generation + testing</td>
+                            <td>Generator + Evaluator</td>
+                            <td>Objective success criterion (tests pass)</td>
+                        </tr>
+                        <tr>
+                            <td>Strategy research with critique</td>
+                            <td>Swarm</td>
+                            <td>Needs adversarial debate, emergent insight</td>
+                        </tr>
+                        <tr>
+                            <td>Data pipeline with LLM steps</td>
+                            <td>Pipeline</td>
+                            <td>Structured, auditable, deterministic</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-market competitive analysis</td>
+                            <td>Parallelisation + Orchestrator</td>
+                            <td>Parallel research, central synthesis</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tip">
+                <div class="tip-title">💡 Hybrid Architectures Are the Norm</div>
+                Real production systems rarely use a single pattern in isolation. A common combination: an <strong>Orchestrator</strong> manages the top-level workflow, spawns <strong>Parallel</strong> subagents for independent research, then passes results through a <strong>Pipeline</strong> for staged refinement, with a <strong>Generator + Evaluator</strong> loop on the quality-critical final output. Identify the dominant pattern first, then bolt on secondary patterns where needed.
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 5 · PITFALLS                      -->
+        <!-- ══════════════════════════════════════════ -->
+        <div class="section" data-category="pitfalls">
+            <h2 class="section-title">Pitfalls, Principles & Production Checklist</h2>
+
+            <div class="tip">
+                <div class="tip-title">❌ The 5 Most Common Agentic Architecture Mistakes</div>
+                <ul>
+                    <li><strong>Over-engineering from day one:</strong> Starting with a Swarm when a single agent with two tools would have worked. Earn complexity through iteration.</li>
+                    <li><strong>No hard iteration limits:</strong> Loops without exit conditions will run until your API budget is exhausted. Always set a max step count.</li>
+                    <li><strong>Treating all actions as reversible:</strong> Sending emails, writing to databases, and calling payment APIs are not undoable. Build explicit confirmation gates for irreversible actions.</li>
+                    <li><strong>Insufficient observability:</strong> You can't debug what you can't see. Every agent call should log its input, output, tool calls, and decision rationale.</li>
+                    <li><strong>Trusting subagent output blindly:</strong> An orchestrator that passes subagent output directly to the next step without validation is a reliability bomb. Validate at each handoff.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Human-in-the-Loop: When to Always Require It</div>
+                <p>No matter how capable your agents, always require human approval before:</p>
+                <ul>
+                    <li>Sending any communication to an external party (email, message, post)</li>
+                    <li>Writing to or deleting from a production database</li>
+                    <li>Triggering financial transactions of any kind</li>
+                    <li>Making changes that affect other people's work or data</li>
+                    <li>Taking any action the system hasn't been explicitly tested on</li>
+                </ul>
+                <p style="margin-top:10px;">The safest default: agents propose, humans approve. Automate the approval away only after you have strong confidence from real-world testing.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Production Readiness Checklist</div>
+                <ul>
+                    <li><strong>[ ] Max iteration limit</strong> set on every loop and every agent</li>
+                    <li><strong>[ ] Structured logging</strong> on every LLM call with input/output/tool use</li>
+                    <li><strong>[ ] Graceful error handling</strong> — what does the system do when a subagent fails?</li>
+                    <li><strong>[ ] Cost budget</strong> — per-task token limits are set and monitored</li>
+                    <li><strong>[ ] Human review gates</strong> before all irreversible actions</li>
+                    <li><strong>[ ] Context window management</strong> — long tasks must summarise or offload memory</li>
+                    <li><strong>[ ] Fallback behaviour</strong> — what happens when the LLM is unavailable?</li>
+                    <li><strong>[ ] Prompt injection defence</strong> — agents that ingest external content must sanitise it</li>
+                    <li><strong>[ ] End-to-end tested</strong> on real tasks before production deployment</li>
+                </ul>
+            </div>
+
+            <div class="tip">
+                <div class="tip-title">💡 The Minimal Footprint Principle</div>
+                Design your agents to request only the permissions they actually need, avoid storing sensitive data beyond the immediate task, prefer reversible actions over irreversible ones, and err on the side of doing less and confirming with the user when uncertain. An agent that does less, reliably, is far more valuable than one that attempts more and fails unpredictably.
+            </div>
+
+            <div class="card">
+                <div class="card-title">Further Reading</div>
+                <ul>
+                    <li><a href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Anthropic: Building Effective Agents</a></li>
+                    <li><a href="https://langchain-ai.github.io/langgraph/" target="_blank">LangGraph — Graph-based agentic orchestration</a></li>
+                    <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use" target="_blank">Anthropic: Tool Use Documentation</a></li>
+                    <li><a href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol (MCP) — Standardised tool integration</a></li>
+                    <li><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank">Lilian Weng: LLM-Powered Autonomous Agents (deep dive)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <p>No results found. Try a different search term or filter.</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-title">Ideas to Life</div>
+            <div class="footer-subtitle">Published by Alexandre Franco · <a href="https://ideas-to-life.ai" target="_blank">ideas-to-life.ai</a></div>
+            <div class="footer-tagline">
+                Turning ideas into consumer experiences with Generative AI.<br>
+                — Built with transparency. Shipped with intent.
+            </div>
+            <div class="footer-links">
+                <span>© 2026 Ideas to Life. All rights reserved.</span>
+                <span>·</span>
+                <a href="#" target="_blank">RSS</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    const searchBox = document.getElementById('searchBox');
+    const sections = document.querySelectorAll('.section');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const noResults = document.getElementById('noResults');
+    let currentFilter = 'all';
+
+    searchBox.addEventListener('input', e => filterContent(e.target.value.toLowerCase(), currentFilter));
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            filterContent(searchBox.value.toLowerCase(), currentFilter);
+        });
+    });
+
+    function filterContent(searchTerm, filter) {
+        let visibleCount = 0;
+
+        sections.forEach(section => {
+            const category = section.dataset.category;
+            const matchesFilter = filter === 'all' || category === filter;
+            let matchesSearch = searchTerm === '';
+
+            // Reset all cards first
+            section.querySelectorAll('.card, .tip, .pattern-card, .decision-flow').forEach(el => {
+                el.style.display = 'block';
+            });
+
+            if (searchTerm !== '') {
+                const sectionTitle = section.querySelector('.section-title').textContent.toLowerCase();
+                if (sectionTitle.includes(searchTerm)) { matchesSearch = true; }
+
+                section.querySelectorAll('.card, .tip, .pattern-card, .decision-flow').forEach(el => {
+                    if (el.textContent.toLowerCase().includes(searchTerm)) {
+                        el.style.display = 'block';
+                        matchesSearch = true;
+                    } else {
+                        el.style.display = 'none';
+                    }
+                });
+            }
+
+            if (matchesSearch && matchesFilter) {
+                section.classList.remove('hidden');
+                visibleCount++;
+                if (searchTerm !== '') highlightCards(section, searchTerm);
+                else resetHighlights(section);
+            } else {
+                section.classList.add('hidden');
+            }
+        });
+
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    function highlightCards(section, term) {
+        section.querySelectorAll('.card, .tip').forEach(card => {
+            const title = card.querySelector('.card-title, .tip-title');
+            if (title && title.textContent.toLowerCase().includes(term)) {
+                card.style.borderLeftColor = '#ffc107';
+                card.style.background = '#fff9e6';
+            }
+        });
+        section.querySelectorAll('.pattern-card').forEach(card => {
+            if (card.querySelector('.pattern-name') &&
+                card.querySelector('.pattern-name').textContent.toLowerCase().includes(term)) {
+                card.style.outline = '3px solid #ffc107';
+            }
+        });
+    }
+
+    function resetHighlights(section) {
+        section.querySelectorAll('.card').forEach(c => { c.style.borderLeftColor = '#667eea'; c.style.background = '#f8f9fa'; });
+        section.querySelectorAll('.tip').forEach(t => { t.style.borderLeftColor = '#ffc107'; t.style.background = '#fff3cd'; });
+        section.querySelectorAll('.pattern-card').forEach(c => { c.style.outline = 'none'; });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // INTERACTIVE PATTERN SELECTOR
+    // ═══════════════════════════════════════════════════════
+
+    const scenarios = {
+        'support-bot': {
+            name: 'Customer Support Bot',
+            questions: [
+                {
+                    q: 'Does your bot need to access multiple external systems (CRM, order DB, knowledge base)?',
+                    answers: ['Yes, multiple systems', 'Just 1-2 simple lookups', 'No external systems needed']
+                },
+                {
+                    q: 'How critical is response speed?',
+                    answers: ['Very critical (sub-2 second)', 'Moderately important', 'Not a priority']
+                },
+                {
+                    q: 'Can the bot make mistakes, or must accuracy be extremely high?',
+                    answers: ['Mistakes are acceptable', 'Moderate accuracy needed', 'Must be extremely accurate']
+                }
+            ],
+            likelyPattern: 'Single Agent with Tools'
+        },
+        'content-pipeline': {
+            name: 'Content Generation Pipeline',
+            questions: [
+                {
+                    q: 'Is the content workflow predictable (always the same stages)?',
+                    answers: ['Yes, very predictable', 'Somewhat predictable', 'Highly variable']
+                },
+                {
+                    q: 'Do you need quality review/editing as a separate step?',
+                    answers: ['Yes, mandatory review', 'Optional review', 'No review needed']
+                },
+                {
+                    q: 'How much autonomy should the system have?',
+                    answers: ['Fully autonomous', 'Some human checkpoints', 'Human approves everything']
+                }
+            ],
+            likelyPattern: 'Pipeline'
+        },
+        'coding-assistant': {
+            name: 'Coding Assistant',
+            questions: [
+                {
+                    q: 'Does generated code need to be automatically tested?',
+                    answers: ['Yes, must pass tests', 'Optional testing', 'No automated testing']
+                },
+                {
+                    q: 'Do you need separate code review / security analysis?',
+                    answers: ['Yes, mandatory review', 'Nice to have', 'Not needed']
+                },
+                {
+                    q: 'Should the system iteratively fix its own bugs?',
+                    answers: ['Yes, auto-fix failures', 'Suggest fixes only', 'No iteration']
+                }
+            ],
+            likelyPattern: 'Generator + Evaluator'
+        },
+        'doc-analysis': {
+            name: 'Batch Document Analysis',
+            questions: [
+                {
+                    q: 'Can documents be processed independently (no dependencies)?',
+                    answers: ['Yes, fully independent', 'Some dependencies', 'Highly interdependent']
+                },
+                {
+                    q: 'How many documents are you processing?',
+                    answers: ['100+', '20-100', 'Under 20']
+                },
+                {
+                    q: 'Is speed a major concern?',
+                    answers: ['Yes, time-critical', 'Moderately important', 'Not important']
+                }
+            ],
+            likelyPattern: 'Parallelisation'
+        },
+        'research-synthesis': {
+            name: 'Research & Synthesis',
+            questions: [
+                {
+                    q: 'Do you need multiple perspectives or adversarial critique?',
+                    answers: ['Yes, critical debate needed', 'Some validation helpful', 'Single perspective fine']
+                },
+                {
+                    q: 'How open-ended is the research task?',
+                    answers: ['Very open-ended', 'Moderately scoped', 'Well-defined scope']
+                },
+                {
+                    q: 'Can the research path be predicted upfront?',
+                    answers: ['No, highly dynamic', 'Somewhat predictable', 'Yes, clear path']
+                }
+            ],
+            likelyPattern: 'Orchestrator + Subagents'
+        },
+        'workflow-automation': {
+            name: 'Workflow Automation',
+            questions: [
+                {
+                    q: 'Is the workflow sequence fixed or dynamic?',
+                    answers: ['Highly dynamic', 'Some variation', 'Fixed sequence']
+                },
+                {
+                    q: 'Do different steps require specialised expertise?',
+                    answers: ['Yes, very specialised', 'Somewhat specialised', 'General skills fine']
+                },
+                {
+                    q: 'How much human oversight is required?',
+                    answers: ['Minimal oversight', 'Some checkpoints', 'Heavy oversight']
+                }
+            ],
+            likelyPattern: 'Orchestrator + Subagents'
+        }
+    };
+
+    let selectedScenario = null;
+    let answers = [];
+
+    // Scenario card clicks
+    document.querySelectorAll('.scenario-card').forEach(card => {
+        card.addEventListener('click', () => {
+            selectedScenario = card.dataset.scenario;
+            showQuestionnaire();
+        });
+    });
+
+    function showQuestionnaire() {
+        const scenario = scenarios[selectedScenario];
+        document.getElementById('selectedScenario').textContent = scenario.name;
+        document.getElementById('scenarioPicker').style.display = 'none';
+        document.getElementById('questionnaire').style.display = 'block';
+
+        const container = document.getElementById('questionContainer');
+        container.innerHTML = '';
+        answers = [];
+
+        scenario.questions.forEach((question, qIndex) => {
+            const qBox = document.createElement('div');
+            qBox.className = 'question-box';
+            qBox.innerHTML = `
+                <div class="question-text">${qIndex + 1}. ${question.q}</div>
+                <div class="answer-options" data-question="${qIndex}">
+                    ${question.answers.map((ans, aIndex) => 
+                        `<div class="answer-option" data-answer="${aIndex}">${ans}</div>`
+                    ).join('')}
+                </div>
+            `;
+            container.appendChild(qBox);
+        });
+
+        // Answer selection
+        document.querySelectorAll('.answer-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const questionIndex = this.parentElement.dataset.question;
+                const answerIndex = this.dataset.answer;
+                
+                // Deselect all in this question
+                this.parentElement.querySelectorAll('.answer-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Select this one
+                this.classList.add('selected');
+                
+                // Store answer
+                answers[questionIndex] = answerIndex;
+            });
+        });
+    }
+
+    document.getElementById('getRecommendation').addEventListener('click', async () => {
+        if (answers.length < scenarios[selectedScenario].questions.length) {
+            alert('Please answer all questions before getting your recommendation.');
+            return;
+        }
+
+        document.getElementById('questionnaire').style.display = 'none';
+        document.getElementById('recommendation').style.display = 'block';
+
+        const scenario = scenarios[selectedScenario];
+        document.getElementById('recommendedPattern').textContent = scenario.likelyPattern;
+
+        // Call Claude API for personalised explanation
+        // await getClaudeRecommendation();
+    });
+
+    async function getClaudeRecommendation() {
+        const scenario = scenarios[selectedScenario];
+        const questionAnswerPairs = scenario.questions.map((q, i) => 
+            `Q: ${q.q}\nA: ${q.answers[answers[i]]}`
+        ).join('\n\n');
+
+        const prompt = `You are an AI architecture consultant. A user is building a "${scenario.name}" system and has answered these questions:
+
+${questionAnswerPairs}
+
+Based on their scenario and answers, explain in 2-3 paragraphs why "${scenario.likelyPattern}" is the recommended architecture pattern for their use case. Be specific about:
+1. Why this pattern fits their particular answers
+2. What specific benefits they'll get from this choice
+3. One key thing to watch out for given their context
+
+Be conversational, practical, and helpful. Assume they've read basic pattern descriptions but want to understand why THIS pattern for THEIR specific situation.`;
+
+        try {
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-20250514',
+                    max_tokens: 1000,
+                    messages: [{ role: 'user', content: prompt }]
+                })
+            });
+
+            const data = await response.json();
+            const explanation = data.content[0].text;
+
+            document.getElementById('recommendationReasoning').innerHTML = 
+                `<div style="line-height:1.8;">${explanation.replace(/\n/g, '<br><br>')}</div>`;
+
+            // Show alternatives
+            showAlternatives();
+        } catch (error) {
+            document.getElementById('recommendationReasoning').innerHTML = 
+                `<p>Unable to generate personalised explanation. Here's why ${scenario.likelyPattern} fits your needs:</p>
+                <p>Based on your scenario and answers, this pattern provides the right balance of ${scenario.likelyPattern.includes('Single') ? 'simplicity and capability' : scenario.likelyPattern.includes('Pipeline') ? 'structure and predictability' : 'flexibility and specialisation'}.</p>`;
+            showAlternatives();
+        }
+    }
+
+    function showAlternatives() {
+        const allPatterns = ['Single Agent with Tools', 'Pipeline', 'Orchestrator + Subagents', 
+                             'Parallelisation', 'Generator + Evaluator', 'Swarm'];
+        const recommended = scenarios[selectedScenario].likelyPattern;
+        const alternatives = allPatterns.filter(p => p !== recommended).slice(0, 2);
+
+        document.getElementById('alternativePatterns').style.display = 'block';
+        document.getElementById('alternativesContent').innerHTML = 
+            `<p>If ${recommended} doesn't feel quite right, also consider: <strong>${alternatives.join('</strong> or <strong>')}</strong>. 
+            Scroll down to read the detailed comparison of all patterns.</p>`;
+    }
+
+    document.getElementById('startOver').addEventListener('click', () => {
+        document.getElementById('recommendation').style.display = 'none';
+        document.getElementById('scenarioPicker').style.display = 'block';
+        selectedScenario = null;
+        answers = [];
+    });
+
+    document.getElementById('learnMore').addEventListener('click', () => {
+        document.querySelector('[data-category="patterns"]').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ═══════════════════════════════════════════════════════
+    // PATH SELECTION
+    // ═══════════════════════════════════════════════════════
+    
+    document.getElementById('pathScenario').addEventListener('click', function() {
+        document.getElementById('pathScenario').classList.add('path-btn-active');
+        document.getElementById('pathTradeoffs').classList.remove('path-btn-active');
+        document.getElementById('scenarioGrid').style.display = 'block';
+        document.getElementById('tradeoffGrid').style.display = 'none';
+    });
+
+    document.getElementById('pathTradeoffs').addEventListener('click', function() {
+        document.getElementById('pathTradeoffs').classList.add('path-btn-active');
+        document.getElementById('pathScenario').classList.remove('path-btn-active');
+        document.getElementById('scenarioGrid').style.display = 'none';
+        document.getElementById('tradeoffGrid').style.display = 'block';
+        initializeRadarChart();
+    });
+
+    // ═══════════════════════════════════════════════════════
+    // TRADE-OFF CONFIGURATOR
+    // ═══════════════════════════════════════════════════════
+
+    const patternScores = {
+        'Single Agent with Tools': { cost: 90, quality: 60, speed: 85, reliability: 65, simplicity: 90, autonomy: 60 },
+        'Pipeline': { cost: 80, quality: 70, speed: 60, reliability: 75, simplicity: 85, autonomy: 40 },
+        'Orchestrator + Subagents': { cost: 50, quality: 85, speed: 50, reliability: 80, simplicity: 40, autonomy: 85 },
+        'Parallelisation': { cost: 40, quality: 70, speed: 95, reliability: 70, simplicity: 60, autonomy: 65 },
+        'Generator + Evaluator': { cost: 60, quality: 90, speed: 40, reliability: 85, simplicity: 50, autonomy: 70 },
+        'Swarm': { cost: 20, quality: 80, speed: 30, reliability: 60, simplicity: 20, autonomy: 95 }
+    };
+
+    let radarCtx, radarChart;
+    let currentTradeoffPattern = null;
+
+    function initializeRadarChart() {
+        if (!radarCtx) {
+            radarCtx = document.getElementById('radarChart').getContext('2d');
+        }
+        updateTradeoffRecommendation();
+    }
+
+    document.querySelectorAll('.tradeoff-slider').forEach(slider => {
+        slider.addEventListener('input', updateTradeoffRecommendation);
+    });
+
+    function updateTradeoffRecommendation() {
+        const costQuality = parseInt(document.getElementById('costQuality').value);
+        const speedReliability = parseInt(document.getElementById('speedReliability').value);
+        const simplicityAutonomy = parseInt(document.getElementById('simplicityAutonomy').value);
+
+        // Calculate match scores for each pattern
+        let bestPattern = null;
+        let bestScore = -Infinity;
+
+        for (const [pattern, scores] of Object.entries(patternScores)) {
+            // Calculate weighted score based on user preferences
+            const costScore = (100 - costQuality) * (scores.cost / 100);
+            const qualityScore = costQuality * (scores.quality / 100);
+            const speedScore = (100 - speedReliability) * (scores.speed / 100);
+            const reliabilityScore = speedReliability * (scores.reliability / 100);
+            const simplicityScore = (100 - simplicityAutonomy) * (scores.simplicity / 100);
+            const autonomyScore = simplicityAutonomy * (scores.autonomy / 100);
+
+            const totalScore = costScore + qualityScore + speedScore + reliabilityScore + simplicityScore + autonomyScore;
+
+            if (totalScore > bestScore) {
+                bestScore = totalScore;
+                bestPattern = pattern;
+            }
+        }
+
+        currentTradeoffPattern = bestPattern;
+        document.getElementById('tradeoffRecommendation').textContent = bestPattern;
+        
+        const reasons = [];
+        if (costQuality < 30) reasons.push('prioritizes low cost');
+        else if (costQuality > 70) reasons.push('prioritizes high quality');
+        if (speedReliability < 30) reasons.push('optimizes for speed');
+        else if (speedReliability > 70) reasons.push('optimizes for reliability');
+        if (simplicityAutonomy < 30) reasons.push('keeps implementation simple');
+        else if (simplicityAutonomy > 70) reasons.push('maximizes agent autonomy');
+
+        document.getElementById('tradeoffReasoning').textContent = 
+            reasons.length > 0 
+                ? `This pattern ${reasons.join(', ')}.`
+                : 'This pattern offers balanced trade-offs across all dimensions.';
+
+        document.getElementById('continueFromTradeoff').style.display = 'block';
+        drawRadarChart(bestPattern);
+    }
+
+    function drawRadarChart(highlightPattern) {
+        const canvas = document.getElementById('radarChart');
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 120;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw background circles
+        ctx.strokeStyle = '#e5e7eb';
+        ctx.lineWidth = 1;
+        for (let i = 1; i <= 5; i++) {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, (radius / 5) * i, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
+        // Draw axes
+        const labels = ['Cost\nEfficiency', 'Quality', 'Speed', 'Reliability', 'Simplicity', 'Autonomy'];
+        const angles = labels.map((_, i) => (i * 2 * Math.PI) / 6 - Math.PI / 2);
+
+        ctx.strokeStyle = '#d1d5db';
+        ctx.lineWidth = 1;
+        angles.forEach((angle, i) => {
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            // Draw labels
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            const labelX = centerX + (radius + 25) * Math.cos(angle);
+            const labelY = centerY + (radius + 25) * Math.sin(angle);
+            const lines = labels[i].split('\n');
+            lines.forEach((line, lineIndex) => {
+                ctx.fillText(line, labelX, labelY + lineIndex * 12);
+            });
+        });
+
+        // Draw pattern polygon
+        if (highlightPattern && patternScores[highlightPattern]) {
+            const scores = patternScores[highlightPattern];
+            const values = [scores.cost, scores.quality, scores.speed, scores.reliability, scores.simplicity, scores.autonomy];
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#667eea';
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+            ctx.lineWidth = 2;
+
+            values.forEach((value, i) => {
+                const angle = angles[i];
+                const distance = (value / 100) * radius;
+                const x = centerX + distance * Math.cos(angle);
+                const y = centerY + distance * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw points
+            values.forEach((value, i) => {
+                const angle = angles[i];
+                const distance = (value / 100) * radius;
+                const x = centerX + distance * Math.cos(angle);
+                const y = centerY + distance * Math.sin(angle);
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fillStyle = '#667eea';
+                ctx.fill();
+            });
+        }
+    }
+
+    document.getElementById('continueFromTradeoff').addEventListener('click', () => {
+        selectedScenario = 'tradeoff-based';
+        document.getElementById('scenarioPicker').style.display = 'none';
+        document.getElementById('recommendation').style.display = 'block';
+        document.getElementById('recommendedPattern').textContent = currentTradeoffPattern;
+        drawPatternDiagram(currentTradeoffPattern);
+        // Call Claude API for personalised explanation
+        // getClaudeRecommendationFromTradeoff();
+    });
+
+    async function getClaudeRecommendationFromTradeoff() {
+        const costQuality = parseInt(document.getElementById('costQuality').value);
+        const speedReliability = parseInt(document.getElementById('speedReliability').value);
+        const simplicityAutonomy = parseInt(document.getElementById('simplicityAutonomy').value);
+
+        const priorities = [];
+        if (costQuality < 40) priorities.push('minimizing cost');
+        else if (costQuality > 60) priorities.push('maximizing quality');
+        else priorities.push('balancing cost and quality');
+
+        if (speedReliability < 40) priorities.push('optimizing for speed');
+        else if (speedReliability > 60) priorities.push('prioritizing reliability');
+        else priorities.push('balancing speed and reliability');
+
+        if (simplicityAutonomy < 40) priorities.push('keeping the system simple to build and maintain');
+        else if (simplicityAutonomy > 60) priorities.push('maximizing agent autonomy and independence');
+        else priorities.push('balancing simplicity and autonomy');
+
+        const prompt = `You are an AI architecture consultant. A user has specified their priorities for an agentic AI system using trade-off sliders:
+
+${priorities.join(', ')}.
+
+Based on these priorities, explain in 2-3 paragraphs why "${currentTradeoffPattern}" is the recommended architecture pattern. Be specific about:
+1. How this pattern aligns with their stated priorities
+2. What specific benefits they'll get from this choice given what they value
+3. One key trade-off or limitation they should be aware of
+
+Be conversational, practical, and helpful.`;
+
+        try {
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-20250514',
+                    max_tokens: 1000,
+                    messages: [{ role: 'user', content: prompt }]
+                })
+            });
+
+            const data = await response.json();
+            const explanation = data.content[0].text;
+            document.getElementById('recommendationReasoning').innerHTML = 
+                `<div style="line-height:1.8;">${explanation.replace(/\n/g, '<br><br>')}</div>`;
+            showAlternatives();
+        } catch (error) {
+            document.getElementById('recommendationReasoning').innerHTML = 
+                `<p>Based on your priorities, ${currentTradeoffPattern} offers the best balance of the characteristics you value most.</p>`;
+            showAlternatives();
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // PATTERN DIAGRAMS
+    // ═══════════════════════════════════════════════════════
+
+    function drawPatternDiagram(patternName) {
+        const canvas = document.getElementById('diagramCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = '14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        if (patternName === 'Single Agent with Tools') {
+            // Central agent
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(250, 50, 100, 60);
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Agent', 300, 80);
+
+            // Tools around it
+            const tools = ['Tool 1', 'Tool 2', 'Tool 3'];
+            const toolX = [150, 300, 450];
+            tools.forEach((tool, i) => {
+                ctx.fillStyle = '#22c55e';
+                ctx.fillRect(toolX[i] - 40, 140, 80, 40);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(tool, toolX[i], 160);
+
+                // Arrows
+                ctx.strokeStyle = '#6c757d';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(300, 110);
+                ctx.lineTo(toolX[i], 140);
+                ctx.stroke();
+            });
+
+        } else if (patternName === 'Pipeline') {
+            // Sequential boxes
+            const stages = ['Stage 1', 'Stage 2', 'Stage 3', 'Stage 4'];
+            stages.forEach((stage, i) => {
+                ctx.fillStyle = '#667eea';
+                ctx.fillRect(50 + i * 130, 70, 100, 60);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(stage, 100 + i * 130, 100);
+
+                // Arrows
+                if (i < stages.length - 1) {
+                    ctx.strokeStyle = '#6c757d';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(150 + i * 130, 100);
+                    ctx.lineTo(180 + i * 130, 100);
+                    ctx.stroke();
+                    // Arrow head
+                    ctx.beginPath();
+                    ctx.moveTo(180 + i * 130, 100);
+                    ctx.lineTo(170 + i * 130, 95);
+                    ctx.lineTo(170 + i * 130, 105);
+                    ctx.closePath();
+                    ctx.fillStyle = '#6c757d';
+                    ctx.fill();
+                }
+            });
+
+        } else if (patternName === 'Orchestrator + Subagents') {
+            // Orchestrator at top
+            ctx.fillStyle = '#764ba2';
+            ctx.fillRect(250, 20, 100, 50);
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Orchestrator', 300, 45);
+
+            // Subagents below
+            const subagents = ['Coder', 'Tester', 'Reviewer'];
+            subagents.forEach((agent, i) => {
+                ctx.fillStyle = '#667eea';
+                ctx.fillRect(100 + i * 200, 120, 100, 50);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(agent, 150 + i * 200, 145);
+
+                // Arrows from orchestrator
+                ctx.strokeStyle = '#6c757d';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(300, 70);
+                ctx.lineTo(150 + i * 200, 120);
+                ctx.stroke();
+            });
+
+        } else if (patternName === 'Parallelisation') {
+            // Input
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(50, 80, 80, 40);
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Input', 90, 100);
+
+            // Parallel agents
+            for (let i = 0; i < 4; i++) {
+                ctx.fillStyle = '#22c55e';
+                ctx.fillRect(200 + i * 90, 30 + i * 35, 70, 40);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(`Agent ${i+1}`, 235 + i * 90, 50 + i * 35);
+
+                // Arrows from input
+                ctx.strokeStyle = '#6c757d';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(130, 100);
+                ctx.lineTo(200 + i * 90, 50 + i * 35);
+                ctx.stroke();
+            }
+
+            // Output
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(470, 80, 80, 40);
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Output', 510, 100);
+
+            // Arrows to output
+            for (let i = 0; i < 4; i++) {
+                ctx.strokeStyle = '#6c757d';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(270 + i * 90, 50 + i * 35);
+                ctx.lineTo(470, 100);
+                ctx.stroke();
+            }
+
+        } else if (patternName === 'Generator + Evaluator') {
+            // Generator
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(100, 50, 100, 60);
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Generator', 150, 80);
+
+            // Evaluator
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(400, 50, 100, 60);
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Evaluator', 450, 80);
+
+            // Forward arrow
+            ctx.strokeStyle = '#6c757d';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(200, 70);
+            ctx.lineTo(400, 70);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(400, 70);
+            ctx.lineTo(390, 65);
+            ctx.lineTo(390, 75);
+            ctx.closePath();
+            ctx.fillStyle = '#6c757d';
+            ctx.fill();
+
+            // Feedback arrow
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(400, 90);
+            ctx.lineTo(200, 90);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(200, 90);
+            ctx.lineTo(210, 85);
+            ctx.lineTo(210, 95);
+            ctx.closePath();
+            ctx.fillStyle = '#6c757d';
+            ctx.fill();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#6c757d';
+            ctx.font = '12px sans-serif';
+            ctx.fillText('Feedback', 300, 105);
+
+        } else if (patternName === 'Swarm') {
+            // Peer agents in a network
+            const agents = ['Agent A', 'Agent B', 'Agent C', 'Agent D'];
+            const positions = [{x: 150, y: 60}, {x: 450, y: 60}, {x: 150, y: 140}, {x: 450, y: 140}];
+
+            // Draw connections first
+            ctx.strokeStyle = '#d1d5db';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < positions.length; i++) {
+                for (let j = i + 1; j < positions.length; j++) {
+                    ctx.beginPath();
+                    ctx.moveTo(positions[i].x, positions[i].y);
+                    ctx.lineTo(positions[j].x, positions[j].y);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw agents
+            agents.forEach((agent, i) => {
+                ctx.fillStyle = '#667eea';
+                ctx.beginPath();
+                ctx.arc(positions[i].x, positions[i].y, 35, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.fillText(agent, positions[i].x, positions[i].y);
+            });
+        }
+    }
+</script>
+</body>
+</html>
